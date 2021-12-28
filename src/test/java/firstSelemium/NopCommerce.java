@@ -33,6 +33,14 @@ public class NopCommerce {
 		WebElement catalogLink = aside.findElement(By.xpath("//aside//nav/ul/li/a/*[contains(text(),'Catalog')]/ancestor::a"));
 		catalogLink.click();
 		
+		WebElement productLink = catalogLink.findElement(By.xpath("//aside//nav/ul/li/a/*[contains(text(),'Catalog')]/ancestor::a/following-sibling::ul/li/a/*[contains(text(), 'Products')]/ancestor::a"));
+		productLink.click();
+		
+		Assert.assertTrue(driver.getCurrentUrl().contains("Product/List"));
+		
+
+
+		
 	}
 
 }
