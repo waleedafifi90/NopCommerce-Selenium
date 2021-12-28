@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -139,8 +140,30 @@ public class NopCommerce {
 		discount.sendKeys("10");
 
 		
+		// First date picker
+		WebElement startDatePickerDateSelect = driver.findElement(By.xpath("//input[@id=\"StartDateUtc\"]/following-sibling::span/span[1]"));
+		startDatePickerDateSelect.click();
 		
+		WebElement nextMonth = driver.findElement(By.xpath("//a[@aria-label=\"Next\"]"));
+		nextMonth.click();
+		
+		WebElement firstDate = driver.findElement(By.xpath("//a[@data-value=\"2022/0/1\"]"));
+		firstDate.click();
 
+		// Second date picker
+		WebElement endDatePickerDateSelect = driver.findElement(By.xpath("//input[@id=\"EndDateUtc\"]/following-sibling::span/span[1]"));
+		endDatePickerDateSelect.click();
+		
+		WebElement nextMonth1 = driver.findElement(By.xpath("//div[@id=\"EndDateUtc_dateview\"]//a[@aria-label=\"Next\"]"));
+		nextMonth1.click();
+
+		
+		WebElement endDate = driver.findElement(By.xpath("//div[@id=\"EndDateUtc_dateview\"]//a[@data-value=\"2022/0/10\"]"));
+		endDate.click();
+		
+		WebElement saveDiscountBtn = driver.findElement(By.name("save"));
+
+		
 		
 	}
 
