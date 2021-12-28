@@ -114,6 +114,33 @@ public class NopCommerce {
 		WebElement discountLink = driver.findElement(By.linkText("Discounts"));
 		discountLink.click();
 		
+		Assert.assertTrue(driver.getCurrentUrl().contains("Discount/List"));
+
+		WebElement discountHeadingTitle = driver.findElement(By.xpath("//div[contains(@class, \"content-header\")]/h1"));
+//		WebElement discountHeadingTitle = driver.findElement(By.tagName("h1"));
+		System.out.println(discountHeadingTitle.getText());
+		Assert.assertTrue(discountHeadingTitle.getText().contains("Discounts"));
+		
+		WebElement addNewDiscount = driver.findElement(By.linkText("Add new"));
+		addNewDiscount.click();
+		
+//		WebElement newDiscountHeadingTitle = driver.findElement(By.tagName("h1"));
+		WebElement newDiscountHeadingTitle = driver.findElement(By.xpath("//div[contains(@class, \"content-header\")]/h1"));
+		Assert.assertTrue(newDiscountHeadingTitle.getText().contains("Add a new discount"));
+		
+		WebElement discountName = driver.findElement(By.id("Name"));
+		discountName.sendKeys("New Year Discount");
+		Assert.assertEquals(discountName.getAttribute("value"), "New Year Discount");
+
+		WebElement discountAmount = driver.findElement(By.xpath("//input[@id=\"DiscountAmount\"]/preceding-sibling::input"));
+		new Actions(driver).moveToElement(discountAmount).click().perform();
+		
+		WebElement discount = driver.findElement(By.xpath("//input[@id=\"DiscountAmount\"]"));
+		discount.sendKeys("10");
+
+		
+		
+
 		
 	}
 
