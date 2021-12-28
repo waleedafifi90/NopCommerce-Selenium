@@ -258,8 +258,9 @@ public class NopCommerce {
 		System.out.println(discountSuccessAlert.getText());
 		Assert.assertTrue(isDiscountAlertContainText, "Check the alert content");
 
+		
+		
 		// Check if discount added using search form, then edit
-
 		handleSearchBox(driver);
 
 		WebElement searchDiscountName = driver.findElement(By.id("SearchDiscountName"));
@@ -351,6 +352,11 @@ public class NopCommerce {
 		WebElement ele = driver.findElement(By.id(divName));
 		if (ele.getAttribute("class").contains("collapsed-card")) {
 			ele.click();
+			WebElement collapseBtn = driver.findElement(By.xpath("//div[@id='"+divName+"']//div[contains(@class, \"card-tools\")]//i"));
+			Assert.assertTrue(collapseBtn.getAttribute("class").contains("fa-minus"));
+			
+			WebElement cardBody = driver.findElement(By.xpath("//div[@id='"+divName+"']//div[contains(@class, \"card-body\")]"));
+			Assert.assertTrue(cardBody.getCssValue("display").contains("block"));
 		}
 	}
 
