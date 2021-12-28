@@ -105,6 +105,16 @@ public class NopCommerce {
 		System.out.println(successAlert.getText());
 		Assert.assertTrue(isAlertContainText, "Check the alert content");
 		
+		
+		//============== Promotion ====================//
+		
+		WebElement promotionLink = driver.findElement(By.xpath("//aside//nav/ul/li/a/*[contains(text(),'Promotions')]/ancestor::a"));
+		promotionLink.click();
+		
+		WebElement discountLink = driver.findElement(By.linkText("Discounts"));
+		discountLink.click();
+		
+		
 	}
 
 }
