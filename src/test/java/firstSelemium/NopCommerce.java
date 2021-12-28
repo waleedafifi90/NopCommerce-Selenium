@@ -38,7 +38,20 @@ public class NopCommerce {
 		
 		Assert.assertTrue(driver.getCurrentUrl().contains("Product/List"));
 		
-
+		WebElement addNewBtn = driver.findElement(By.xpath("//div[@class=\"content-wrapper\"]/form/div[1]//a"));
+		Assert.assertEquals(addNewBtn.getText(), "Add new");
+		addNewBtn.click();
+		
+		WebElement addNewProductHeading = driver.findElement(By.xpath("//form[@id=\"product-form\"]//h1"));
+		Assert.assertTrue(addNewProductHeading.getText().contains("Add a new product"));
+		
+		WebElement productName = driver.findElement(By.id("Name"));
+		productName.sendKeys("PREMIUM CARE Cat & Dog Calming");
+		Assert.assertEquals(productName.getAttribute("value"), "PREMIUM CARE Cat & Dog Calming");
+		
+		WebElement shortDescription = driver.findElement(By.id("ShortDescription"));
+		shortDescription.sendKeys("ADVANCED STRESS RELIEF FORMULA: Our pheromones diffuser helps reduce separation anxiety and fear of loud noises, such as thunderstorms and fireworks, increases focus during training sessions, and helps pets adapt to new environments");
+		Assert.assertEquals(shortDescription.getAttribute("value"), "ADVANCED STRESS RELIEF FORMULA: Our pheromones diffuser helps reduce separation anxiety and fear of loud noises, such as thunderstorms and fireworks, increases focus during training sessions, and helps pets adapt to new environments");
 
 		
 	}
