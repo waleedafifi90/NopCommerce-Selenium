@@ -17,19 +17,24 @@ public class NopCommerce {
 
 	public static void main(String[] args) throws InterruptedException {
 		// TODO Auto-generated method stub
-		
-		
-		
+
 		// ===== Constant ===== //
 		String productName = "PREMIUM CARE Cat & Dog Calming";
 		String productDescription = "ADVANCED STRESS RELIEF FORMULA: Our pheromones";
-		
+		String inventoryMethod = "Track inventory by product attributes";
+		String inventoryOption = "2";
+		String productSuccessAleart = "The new product has been added successfully.";
+		String discountName = "New Year Discount";
+		String startDate = "2022/0/1";
+		String endDate = "2022/0/10";
 
 		String url = "https://admin-demo.nopcommerce.com/Admin";
 		WebDriver driver = new ChromeDriver();
 		driver.get(url);
 		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 		driver.manage().window().maximize();
+		
+		Actions action = new Actions(driver);
 
 		Assert.assertTrue(driver.getCurrentUrl().contains("login"));
 
@@ -58,6 +63,10 @@ public class NopCommerce {
 
 		WebElement addNewBtn = driver.findElement(By.xpath("//div[@class=\"content-wrapper\"]/form/div[1]//a"));
 		Assert.assertEquals(addNewBtn.getText(), "Add new");
+		action.clickAndHold(addNewBtn).build().perform();
+		Thread.sleep(2000);
+		System.out.println(addNewBtn.getCssValue("background-color"));
+		Assert.assertTrue(addNewBtn.getCssValue("background-color").equals("rgba(0, 98, 204, 1)"));
 		addNewBtn.click();
 
 		WebElement addNewProductHeading = driver.findElement(By.xpath("//form[@id=\"product-form\"]//h1"));
@@ -96,9 +105,9 @@ public class NopCommerce {
 				.findElement(By.xpath("//ul[@id='SelectedCategoryIds_taglist']//*[contains(text(), 'Computers')]"));
 		Assert.assertEquals(selectCategoryListItems.get(0).getText(), "Computers");
 
-		// ====================//
+		// ==================== //
 		cardCollapse(driver, "product-price");
-		// ====================//
+		// ==================== //
 
 		WebElement priceField = driver.findElement(By.xpath("//input[@id=\"Price\"]/preceding-sibling::input"));
 		new Actions(driver).moveToElement(priceField).click().perform();
@@ -112,9 +121,9 @@ public class NopCommerce {
 
 		WebElement manageInventoryMethodId = driver.findElement(By.id("ManageInventoryMethodId"));
 		Select dropdown = new Select(manageInventoryMethodId);
-		dropdown.selectByValue("2");
+		dropdown.selectByValue(inventoryOption);
 
-		Assert.assertEquals(dropdown.getFirstSelectedOption().getText(), "Track inventory by product attributes");
+		Assert.assertEquals(dropdown.getFirstSelectedOption().getText(), inventoryMethod);
 
 		WebElement saveProductBtn = driver.findElement(By.name("save"));
 		saveProductBtn.click();
@@ -126,14 +135,23 @@ public class NopCommerce {
 		boolean isSuccess = (successAlert.getCssValue("background-color").equals("rgba(23, 183, 109, 1)"));
 		Assert.assertTrue(isSuccess, "Check the alert back color");
 
-		boolean isAlertContainText = successAlert.getText().contains("The new product has been added successfully.");
+		boolean isAlertContainText = successAlert.getText().contains(productSuccessAleart);
 		System.out.println(successAlert.getText());
 		Assert.assertTrue(isAlertContainText, "Check the alert content");
 		isLoading(driver);
-		
-		//======================= Check if product added to the list ===== //
+
+		// ======================= Check if product added to the list ===== //
+		handleSearchBox(driver);
+
 		WebElement productSearchNameField = driver.findElement(By.id("SearchProductName"));
+		productSearchNameField.sendKeys(productName);
+		Assert.assertEquals(productSearchNameField.getAttribute("value"), productName);
+
+		WebElement productSearchBtn = driver.findElement(By.id("search-products"));
+		productSearchBtn.click();
 		
+		WebElement tableDataProductName = driver.findElement(By.xpath("//table[@id='products-grid']//td[3]"));
+		Assert.assertEquals(tableDataProductName.getText(), productName);
 
 		// ============== Promotion ====================//
 
@@ -163,9 +181,9 @@ public class NopCommerce {
 				.findElement(By.xpath("//div[contains(@class, \"content-header\")]/h1"));
 		Assert.assertTrue(newDiscountHeadingTitle.getText().contains("Add a new discount"));
 
-		WebElement discountName = driver.findElement(By.id("Name"));
-		discountName.sendKeys("New Year Discount");
-		Assert.assertEquals(discountName.getAttribute("value"), "New Year Discount");
+		WebElement discountNameElement = driver.findElement(By.id("Name"));
+		discountNameElement.sendKeys(discountName);
+		Assert.assertEquals(discountNameElement.getAttribute("value"), discountName);
 
 		WebElement discountAmount = driver
 				.findElement(By.xpath("//input[@id=\"DiscountAmount\"]/preceding-sibling::input"));
@@ -191,7 +209,7 @@ public class NopCommerce {
 		nextMonth.click();
 
 		WebElement firstDate = driver
-				.findElement(By.xpath("//div[@id=\"StartDateUtc_dateview\"]//a[@data-value=\"2022/0/1\"]"));
+				.findElement(By.xpath("//div[@id=\"StartDateUtc_dateview\"]//a[@data-value='" + startDate + "']"));
 		firstDate.click();
 
 		// Second date picker
@@ -203,9 +221,9 @@ public class NopCommerce {
 				.findElement(By.xpath("//div[@id=\"EndDateUtc_dateview\"]//a[@aria-label=\"Next\"]"));
 		nextMonth1.click();
 
-		WebElement endDate = driver
-				.findElement(By.xpath("//div[@id=\"EndDateUtc_dateview\"]//a[@data-value=\"2022/0/10\"]"));
-		endDate.click();
+		WebElement endDatePicker = driver
+				.findElement(By.xpath("//div[@id=\"EndDateUtc_dateview\"]//a[@data-value='" + endDate + "']"));
+		endDatePicker.click();
 
 		WebElement saveDiscountBtn = driver.findElement(By.name("save"));
 		saveDiscountBtn.click();
@@ -226,16 +244,21 @@ public class NopCommerce {
 		Assert.assertTrue(isDiscountAlertContainText, "Check the alert content");
 
 		// Check if discount added using search form, then edit
+
+		handleSearchBox(driver);
+
 		WebElement searchDiscountName = driver.findElement(By.id("SearchDiscountName"));
-		searchDiscountName.sendKeys("New Year Discount");
-		Assert.assertEquals(searchDiscountName.getAttribute("value"), "New Year Discount");
+		searchDiscountName.sendKeys(discountName);
+		Assert.assertEquals(searchDiscountName.getAttribute("value"), discountName);
 
 		WebElement discountSearchBtn = driver.findElement(By.id("search-discounts"));
 		discountSearchBtn.click();
 		isLoading(driver);
+		
+		Thread.sleep(1000);
 
 		List<WebElement> tableData = driver.findElements(By.xpath("//table[@id=\"discounts-grid\"]//td"));
-		Assert.assertEquals(tableData.get(0).getText(), "New Year Discount");
+		Assert.assertEquals(tableData.get(0).getText(), discountName);
 
 		WebElement editDiscountBtn = driver
 				.findElement(By.xpath("//table[@id=\"discounts-grid\"]//td[contains(@class, 'button-column')]/a"));
@@ -270,14 +293,24 @@ public class NopCommerce {
 				checkboxElement.click();
 
 				WebElement saveToDiscountBtn = driver.findElement(By.name("save"));
-
+				saveToDiscountBtn.click();
+				
 				driver.switchTo().window(mwh);
 			}
 		}
 
 		// ================= Check if product added to discount =========//
+		Thread.sleep(1000);
 		WebElement productDiscountTable = driver.findElement(By.xpath("//table[@id='products-grid']/tbody/tr/td[1]"));
 		Assert.assertEquals(productDiscountTable.getText(), productName);
+		
+		WebElement saveEditDiscountBtn = driver.findElement(By.name("save"));
+		action.clickAndHold(saveEditDiscountBtn).build().perform();
+		Thread.sleep(2000);
+		System.out.println(saveEditDiscountBtn.getCssValue("background-color"));
+		Assert.assertTrue(saveEditDiscountBtn.getCssValue("background-color").equals("rgba(0, 98, 204, 1)"));
+		saveEditDiscountBtn.click();
+		
 
 	}
 
@@ -285,6 +318,13 @@ public class NopCommerce {
 	public static void cardCollapse(WebDriver driver, String divName) {
 		WebElement ele = driver.findElement(By.id(divName));
 		if (ele.getAttribute("class").contains("collapsed-card")) {
+			ele.click();
+		}
+	}
+
+	public static void handleSearchBox(WebDriver driver) {
+		WebElement ele = driver.findElement(By.xpath("//div[contains(@class, 'card-search')]/div/div[1]"));
+		if (!ele.getAttribute("class").contains("opened")) {
 			ele.click();
 		}
 	}
