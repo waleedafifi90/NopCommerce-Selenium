@@ -27,6 +27,9 @@ public class NopCommerce {
 		String discountName = "New Year Discount";
 		String startDate = "2022/0/1";
 		String endDate = "2022/0/10";
+		String usernameContent = "John Smith";
+		String discountAlertUpdate = "The discount has been updated successfully.";
+		String discountAddedAlert = "The new discount has been added successfully.";
 
 		String url = "https://admin-demo.nopcommerce.com/Admin";
 		WebDriver driver = new ChromeDriver();
@@ -43,6 +46,9 @@ public class NopCommerce {
 
 		WebElement loginBtn = driver.findElement(By.cssSelector("button[type=\"submit\"]"));
 		loginBtn.click();
+		
+		WebElement usernameElement = driver.findElement(By.xpath("//nav[contains(@class, 'main-header')]/div/ul[1]"));
+		Assert.assertTrue(usernameElement.getText().contains(usernameContent));
 
 		Assert.assertTrue(driver.getCurrentUrl().contains("Admin"));
 
@@ -53,7 +59,16 @@ public class NopCommerce {
 		WebElement catalogLink = aside
 				.findElement(By.xpath("//aside//nav/ul/li/a/*[contains(text(),'Catalog')]/ancestor::a"));
 		catalogLink.click();
+		
+		WebElement catalogListItem = aside.findElement(By.xpath("//aside//nav/ul/li/a/*[contains(text(),'Catalog')]/ancestor::li"));
+		Thread.sleep(1000);
+		Assert.assertTrue(catalogListItem.getAttribute("class").contains("menu-open"));
 
+		
+		WebElement catalogNestedList = catalogLink.findElement(By.xpath(
+				"//aside//nav/ul/li/a/*[contains(text(),'Catalog')]/ancestor::a/following-sibling::ul"));
+		Assert.assertTrue(catalogNestedList.getCssValue("display").equals("block"));
+		
 		WebElement productLink = catalogLink.findElement(By.xpath(
 				"//aside//nav/ul/li/a/*[contains(text(),'Catalog')]/ancestor::a/following-sibling::ul/li/a/*[contains(text(), 'Products')]/ancestor::a"));
 		productLink.click();
@@ -239,7 +254,7 @@ public class NopCommerce {
 		Assert.assertTrue(isDiscountSuccess, "Check the alert back color");
 
 		boolean isDiscountAlertContainText = discountSuccessAlert.getText()
-				.contains("The new discount has been added successfully.");
+				.contains(discountAddedAlert);
 		System.out.println(discountSuccessAlert.getText());
 		Assert.assertTrue(isDiscountAlertContainText, "Check the alert content");
 
@@ -310,6 +325,23 @@ public class NopCommerce {
 		System.out.println(saveEditDiscountBtn.getCssValue("background-color"));
 		Assert.assertTrue(saveEditDiscountBtn.getCssValue("background-color").equals("rgba(0, 98, 204, 1)"));
 		saveEditDiscountBtn.click();
+		
+		
+		Assert.assertTrue(driver.getCurrentUrl().contains("Discount/List"));
+		isLoading(driver);
+
+		WebElement discountUpdateSuccessAlert = driver.findElement(By.className("alert-success"));
+		System.out.println(discountUpdateSuccessAlert.getCssValue("background-color"));
+		boolean isDiscountUpdatedSuccess = (discountUpdateSuccessAlert.getCssValue("background-color")
+				.equals("rgba(23, 183, 109, 1)"));
+		Assert.assertTrue(isDiscountUpdatedSuccess, "Check the alert back color");
+
+		boolean isDiscountUpdatedAlertContainText = discountUpdateSuccessAlert.getText()
+				.contains(discountAlertUpdate);
+		System.out.println(discountUpdateSuccessAlert.getText());
+		Assert.assertTrue(isDiscountUpdatedAlertContainText, "Check the alert content");
+
+		driver.close();
 		
 
 	}
