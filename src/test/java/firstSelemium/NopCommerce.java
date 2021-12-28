@@ -1,16 +1,19 @@
 package firstSelemium;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 
 public class NopCommerce {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		// TODO Auto-generated method stub
 
 		String url = "https://admin-demo.nopcommerce.com/Admin";
@@ -62,8 +65,34 @@ public class NopCommerce {
 		fullDescription.sendKeys("ADVANCED STRESS RELIEF FORMULA: Our pheromones");
 		Assert.assertEquals(fullDescription.getText(), "ADVANCED STRESS RELIEF FORMULA: Our pheromones");
 		driver.switchTo().defaultContent();
-
 		
+		WebElement sku = driver.findElement(By.name("Sku"));
+		sku.sendKeys("123123123");
+		Assert.assertEquals(sku.getAttribute("value"), "123123123");
+		
+		WebElement category = driver.findElement(By.xpath("//select[@id=\"SelectedCategoryIds\"]/parent::div"));
+		category.click();
+		
+		List<WebElement> selectCategoryListItems = driver.findElements(By.xpath("//ul[@id=\"SelectedCategoryIds_listbox\"]/li"));
+		selectCategoryListItems.get(0).click();
+		
+		WebElement selectedCategoryList = driver.findElement(By.xpath("//ul[@id='SelectedCategoryIds_taglist']//*[contains(text(), 'Computers')]"));
+		Assert.assertEquals(selectCategoryListItems.get(0).getText(), "Computers");
+		
+		WebElement priceField = driver.findElement(By.xpath("//input[@id=\"Price\"]/preceding-sibling::input"));
+		new Actions(driver).moveToElement(priceField).click().perform();
+		
+		WebElement price = driver.findElement(By.xpath("//input[@id=\"Price\"]"));
+		price.sendKeys("100");
+		
+		WebElement manageInventoryMethodId = driver.findElement(By.id("ManageInventoryMethodId"));
+		Select dropdown = new Select(manageInventoryMethodId);
+		dropdown.selectByValue("2");
+		
+		Assert.assertEquals(dropdown.getFirstSelectedOption().getText(), "Track inventory by product attributes");
+		
+		WebElement saveProductBtn = driver.findElement(By.name("save"));
+		saveProductBtn.click();
 	}
 
 }
