@@ -138,6 +138,13 @@ public class NopCommerce {
 		
 		WebElement discount = driver.findElement(By.xpath("//input[@id=\"DiscountAmount\"]"));
 		discount.sendKeys("10");
+		
+		// Select discount type
+		WebElement discountType = driver.findElement(By.id("DiscountTypeId"));
+		Select dropdownDiscountType = new Select(discountType);
+		dropdownDiscountType.selectByValue("2");
+		
+		Assert.assertEquals(dropdownDiscountType.getFirstSelectedOption().getText(), "Assigned to products");
 
 		
 		// First date picker
@@ -162,6 +169,7 @@ public class NopCommerce {
 		endDate.click();
 		
 		WebElement saveDiscountBtn = driver.findElement(By.name("save"));
+		saveDiscountBtn.click();
 
 		
 		
