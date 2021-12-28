@@ -1,5 +1,7 @@
 package firstSelemium;
 
+import java.util.concurrent.TimeUnit;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -14,6 +16,7 @@ public class NopCommerce {
 		String url = "https://admin-demo.nopcommerce.com/Admin";
 		WebDriver driver = new ChromeDriver();
 		driver.get(url);
+		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 		driver.manage().window().maximize();
 		
 		Assert.assertTrue(driver.getCurrentUrl().contains("login"));
@@ -50,8 +53,15 @@ public class NopCommerce {
 		Assert.assertEquals(productName.getAttribute("value"), "PREMIUM CARE Cat & Dog Calming");
 		
 		WebElement shortDescription = driver.findElement(By.id("ShortDescription"));
-		shortDescription.sendKeys("ADVANCED STRESS RELIEF FORMULA: Our pheromones diffuser helps reduce separation anxiety and fear of loud noises, such as thunderstorms and fireworks, increases focus during training sessions, and helps pets adapt to new environments");
-		Assert.assertEquals(shortDescription.getAttribute("value"), "ADVANCED STRESS RELIEF FORMULA: Our pheromones diffuser helps reduce separation anxiety and fear of loud noises, such as thunderstorms and fireworks, increases focus during training sessions, and helps pets adapt to new environments");
+		shortDescription.sendKeys("ADVANCED STRESS RELIEF FORMULA: Our pheromones");
+		Assert.assertEquals(shortDescription.getAttribute("value"), "ADVANCED STRESS RELIEF FORMULA: Our pheromones");
+
+		
+		driver.switchTo().frame(driver.findElement(By.xpath("//iframe[@id='FullDescription_ifr']")));
+		WebElement fullDescription = driver.findElement(By.tagName("body"));
+		fullDescription.sendKeys("ADVANCED STRESS RELIEF FORMULA: Our pheromones");
+		Assert.assertEquals(fullDescription.getText(), "ADVANCED STRESS RELIEF FORMULA: Our pheromones");
+		driver.switchTo().defaultContent();
 
 		
 	}
