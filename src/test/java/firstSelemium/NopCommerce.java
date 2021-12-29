@@ -86,20 +86,22 @@ public class NopCommerce {
 		Assert.assertTrue(aside.isDisplayed(), "Aside visibility");
 		isHeading(driver, dashboardTitle);
 
-		WebElement catalogLink = aside
-				.findElement(By.xpath("//aside//nav/ul/li/a/*[contains(text(),'Catalog')]/ancestor::a"));
-		catalogLink.click();
-
-		WebElement catalogListItem = aside
-				.findElement(By.xpath("//aside//nav/ul/li/a/*[contains(text(),'Catalog')]/ancestor::li"));
-		Thread.sleep(1000);
-		Assert.assertTrue(catalogListItem.getAttribute("class").contains("menu-open"));
-
-		checkNestedList(driver, catalog);
-
-		WebElement productLink = catalogLink.findElement(By.xpath("//aside//nav/ul/li/a/*[contains(text(),'Catalog')]"
-				+ "/ancestor::a/following-sibling::ul/li/a/*[contains(text(), 'Products')]/" + "ancestor::a"));
-		productLink.click();
+		navigateToProduct(driver, catalog);
+		
+//		WebElement catalogLink = aside
+//				.findElement(By.xpath("//aside//nav/ul/li/a/*[contains(text(),'Catalog')]/ancestor::a"));
+//		catalogLink.click();
+//
+//		WebElement catalogListItem = aside
+//				.findElement(By.xpath("//aside//nav/ul/li/a/*[contains(text(),'Catalog')]/ancestor::li"));
+//		Thread.sleep(1000);
+//		Assert.assertTrue(catalogListItem.getAttribute("class").contains("menu-open"));
+//
+//		checkNestedList(driver, catalog);
+//
+//		WebElement productLink = catalogLink.findElement(By.xpath("//aside//nav/ul/li/a/*[contains(text(),'Catalog')]"
+//				+ "/ancestor::a/following-sibling::ul/li/a/*[contains(text(), 'Products')]/" + "ancestor::a"));
+//		productLink.click();
 
 		Assert.assertTrue(driver.getCurrentUrl().contains("Product/List"));
 		isHeading(driver, productListTitle);
@@ -190,17 +192,7 @@ public class NopCommerce {
 		// ======================= Check if product added to the list ===== //
 		handleSearchBox(driver);
 
-		WebElement productSearchNameField = driver.findElement(By.id("SearchProductName"));
-		productSearchNameField.sendKeys(productName);
-		Assert.assertEquals(productSearchNameField.getAttribute("value"), productName);
-
-		WebElement productSearchBtn = driver.findElement(By.id("search-products"));
-//		isActive(productSearchBtn, action, activeButtonColor);
-		productSearchBtn.click();
-
-		WebElement tableDataProductName = driver.findElement(By.xpath("//table[@id='products-grid']//td[3]"));
-		Thread.sleep(1000);
-		Assert.assertEquals(tableDataProductName.getText(), productName);
+		searchForProduct(driver, productName);
 
 		// ============== Promotion ====================//
 
@@ -384,8 +376,62 @@ public class NopCommerce {
 		System.out.println(discountUpdateSuccessAlert.getText());
 		Assert.assertTrue(isDiscountUpdatedAlertContainText, "Check the alert content");
 
+		
+		
+		// Back to product page to check the discount
+		navigateToProduct(driver, catalog);
+		searchForProduct(driver, productName);
+		
+		//Click on edit button for the product
+		WebElement editProduct = driver.findElement(By.xpath("//table[@id='products-grid']//td[8]/a"));
+		editProduct.click();
+
+		WebElement bodyElement = driver.findElement(By.xpath("//body"));
+		boolean bodyClass = bodyElement.getAttribute("class").contains("basic-settings-mode");
+		if(bodyClass) {
+			WebElement advance = driver.findElement(By.xpath("//label[@for=\"advanced-settings-mode\"]"));
+			advance.click();
+			
+			WebElement discountList = driver.findElement(By.xpath("//ul[@id=\"SelectedDiscountIds_taglist\"]/li"));
+			Assert.assertTrue(discountList.getText().contains(discountName));
+		}
+		
+
+		
 		driver.close();
 
+	}
+	
+	private static void searchForProduct(WebDriver driver, String productName) throws InterruptedException {
+		// TODO Auto-generated method stub
+		WebElement productSearchNameField = driver.findElement(By.id("SearchProductName"));
+		productSearchNameField.sendKeys(productName);
+		Assert.assertEquals(productSearchNameField.getAttribute("value"), productName);
+
+		WebElement productSearchBtn = driver.findElement(By.id("search-products"));
+//		isActive(productSearchBtn, action, activeButtonColor);
+		productSearchBtn.click();
+
+		WebElement tableDataProductName = driver.findElement(By.xpath("//table[@id='products-grid']//td[3]"));
+		Thread.sleep(1000);
+		Assert.assertEquals(tableDataProductName.getText(), productName);
+	}
+
+	private static void navigateToProduct(WebDriver driver, String eleTitle) throws InterruptedException {
+		WebElement catalogLink = driver
+				.findElement(By.xpath("//aside//nav/ul/li/a/*[contains(text(),'Catalog')]/ancestor::a"));
+		catalogLink.click();
+
+		WebElement catalogListItem = driver
+				.findElement(By.xpath("//aside//nav/ul/li/a/*[contains(text(),'Catalog')]/ancestor::li"));
+		Thread.sleep(1000);
+		Assert.assertTrue(catalogListItem.getAttribute("class").contains("menu-open"));
+
+		checkNestedList(driver, eleTitle);
+
+		WebElement productLink = catalogLink.findElement(By.xpath("//aside//nav/ul/li/a/*[contains(text(),'Catalog')]"
+				+ "/ancestor::a/following-sibling::ul/li/a/*[contains(text(), 'Products')]/" + "ancestor::a"));
+		productLink.click();
 	}
 
 	private static void checkNestedList(WebDriver driver, String listName) {
