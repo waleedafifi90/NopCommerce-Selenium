@@ -385,6 +385,8 @@ public class NopCommerce {
 		editProduct.click();
 		isHeading(driver, editProductTitle);
 
+		cardCollapse(driver, "product-price");
+		
 		WebElement bodyElement = driver.findElement(By.xpath("//body"));
 		boolean bodyClass = bodyElement.getAttribute("class").contains("basic-settings-mode");
 		if (bodyClass) {
