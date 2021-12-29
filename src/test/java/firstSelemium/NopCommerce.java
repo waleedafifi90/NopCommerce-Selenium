@@ -40,7 +40,12 @@ public class NopCommerce {
 		String discountTitle = "Discounts";
 		String addDiscountTitle = "Add a new discount";
 		String editDiscountTitle = "Edit discount details";
-
+		int min = 500000000;
+	    int max = 900000000;
+		int sku = (int) Math.floor(Math.random()*(max-min+1)+min);
+		String catalog = "Catalog";
+		String promotion = "Promotions";
+		
 		// ========= Driver =========//
 		String url = "https://admin-demo.nopcommerce.com/Admin";
 		WebDriver driver = new ChromeDriver();
@@ -65,9 +70,9 @@ public class NopCommerce {
 		Assert.assertFalse(passwordField.getAttribute("value").isEmpty());
 
 		WebElement loginBtn = driver.findElement(By.cssSelector("button[type=\"submit\"]"));
-		action.moveToElement(loginBtn).build().perform();
-		Thread.sleep(1500);
-		Assert.assertTrue(loginBtn.getCssValue("background-color").equals("rgba(36, 142, 206, 1)"));
+//		action.moveToElement(loginBtn).build().perform();
+//		Thread.sleep(1500);
+//		Assert.assertTrue(loginBtn.getCssValue("background-color").equals("rgba(36, 142, 206, 1)"));
 		loginBtn.click();
 
 		// ======== Start Product page =========/
@@ -89,9 +94,7 @@ public class NopCommerce {
 		Thread.sleep(1000);
 		Assert.assertTrue(catalogListItem.getAttribute("class").contains("menu-open"));
 
-		WebElement catalogNestedList = catalogLink.findElement(
-				By.xpath("//aside//nav/ul/li/a/*[contains(text(),'Catalog')]/ancestor::a/following-sibling::ul"));
-		Assert.assertTrue(catalogNestedList.getCssValue("display").equals("block"));
+		checkNestedList(driver, catalog);
 
 		WebElement productLink = catalogLink.findElement(By.xpath("//aside//nav/ul/li/a/*[contains(text(),'Catalog')]"
 				+ "/ancestor::a/following-sibling::ul/li/a/*[contains(text(), 'Products')]/" + "ancestor::a"));
@@ -130,9 +133,9 @@ public class NopCommerce {
 		Assert.assertEquals(fullDescription.getText(), productDescription);
 		driver.switchTo().defaultContent();
 
-		WebElement sku = driver.findElement(By.name("Sku"));
-		sku.sendKeys("123123123");
-		Assert.assertEquals(sku.getAttribute("value"), "123123123");
+		WebElement skuElement = driver.findElement(By.name("Sku"));
+		skuElement.sendKeys(Integer.toString(sku));
+		Assert.assertEquals(skuElement.getAttribute("value"), Integer.toString(sku));
 
 		WebElement category = driver.findElement(By.xpath("//select[@id=\"SelectedCategoryIds\"]/parent::div"));
 		category.click();
@@ -203,6 +206,9 @@ public class NopCommerce {
 		WebElement promotionLink = driver
 				.findElement(By.xpath("//aside//nav/ul/li/a/*[contains(text(),'Promotions')]/ancestor::a"));
 		promotionLink.click();
+		
+		checkNestedList(driver, promotion);
+
 
 		WebElement discountLink = driver.findElement(By.linkText("Discounts"));
 		discountLink.click();
@@ -259,6 +265,7 @@ public class NopCommerce {
 		WebElement firstDate = driver
 				.findElement(By.xpath("//div[@id=\"StartDateUtc_dateview\"]//a[@data-value='" + startDate + "']"));
 		System.out.println(firstDate.getText());
+		Thread.sleep(1000);
 		firstDate.click();
 
 		// Second date picker
@@ -323,13 +330,13 @@ public class NopCommerce {
 		addProductDiscount.click();
 
 		// ===================== popup windows ================//
-		String mwh = driver.getWindowHandle();
-		Set s = driver.getWindowHandles(); // this method will gives you the handles of all opened windows
-		Iterator ite = s.iterator();
+		String mainWindowHandle = driver.getWindowHandle();
+		Set allWindowHandles = driver.getWindowHandles(); // this method will gives you the handles of all opened windows
+		Iterator iterator = allWindowHandles.iterator();
 
-		while (ite.hasNext()) {
-			String popupHandle = ite.next().toString();
-			if (!popupHandle.contains(mwh)) {
+		while (iterator.hasNext()) {
+			String popupHandle = iterator.next().toString();
+			if (!popupHandle.contains(mainWindowHandle)) {
 				driver.switchTo().window(popupHandle);
 
 				WebElement popSearchProductName = driver.findElement(By.id("SearchProductName"));
@@ -348,8 +355,8 @@ public class NopCommerce {
 
 				WebElement saveToDiscountBtn = driver.findElement(By.name("save"));
 				saveToDiscountBtn.click();
-
-				driver.switchTo().window(mwh);
+				
+				driver.switchTo().window(mainWindowHandle);
 			}
 		}
 
@@ -376,8 +383,16 @@ public class NopCommerce {
 		System.out.println(discountUpdateSuccessAlert.getText());
 		Assert.assertTrue(isDiscountUpdatedAlertContainText, "Check the alert content");
 
-//		driver.close();
+		driver.close();
 
+	}
+
+	private static void checkNestedList(WebDriver driver, String listName) {
+		WebElement ele = driver.findElement(
+				By.xpath("//aside//nav/ul/li/a/*[contains(text(),'"+listName+"')]/ancestor::a/following-sibling::ul"));
+		Assert.assertTrue(ele.getCssValue("display").equals("block"));
+
+		
 	}
 
 	// Check collapsed div
