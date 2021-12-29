@@ -45,6 +45,7 @@ public class NopCommerce {
 		int sku = (int) Math.floor(Math.random()*(max-min+1)+min);
 		String catalog = "Catalog";
 		String promotion = "Promotions";
+		String addNew = "Add new";
 		
 		// ========= Driver =========//
 		String url = "https://admin-demo.nopcommerce.com/Admin";
@@ -105,7 +106,7 @@ public class NopCommerce {
 		isLoading(driver);
 
 		WebElement addNewBtn = driver.findElement(By.xpath("//div[@class=\"content-wrapper\"]/form/div[1]//a"));
-		Assert.assertEquals(addNewBtn.getText(), "Add new");
+		Assert.assertEquals(addNewBtn.getText(), addNew);
 		isHover(addNewBtn, action, hoverButtonColor);
 		isActive(addNewBtn, action, activeButtonColor);
 		addNewBtn.click();
@@ -223,7 +224,7 @@ public class NopCommerce {
 //		Assert.assertTrue(discountHeadingTitle.getText().contains("Discounts"));
 		isHeading(driver, discountTitle);
 
-		WebElement addNewDiscount = driver.findElement(By.linkText("Add new"));
+		WebElement addNewDiscount = driver.findElement(By.linkText(addNew));
 		addNewDiscount.click();
 
 		Assert.assertTrue(driver.getCurrentUrl().contains("Discount/Create"));
