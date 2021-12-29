@@ -47,6 +47,8 @@ public class NopCommerce {
 		String promotion = "Promotions";
 		String addNew = "Add new";
 		String editProductTitle = "Edit product details - " + productName;
+		String productNameTooltip = "The name of the product.";
+		String productDescriptionTooltip = "Short description is the text that is displayed in product list i.e. сategory / manufacturer pages.";
 
 		// ========= Driver =========//
 		String url = "https://admin-demo.nopcommerce.com/Admin";
@@ -123,10 +125,12 @@ public class NopCommerce {
 		// ==================== //
 
 		WebElement productNameElement = driver.findElement(By.id("Name"));
+		checkToolTip(driver, action, "Name", productNameTooltip);
 		productNameElement.sendKeys(productName);
 		Assert.assertEquals(productNameElement.getAttribute("value"), productName);
 
 		WebElement shortDescription = driver.findElement(By.id("ShortDescription"));
+		checkToolTip(driver, action, "ShortDescription", productDescriptionTooltip);
 		shortDescription.sendKeys(productDescription);
 		Assert.assertEquals(shortDescription.getAttribute("value"), productDescription);
 
@@ -489,5 +493,11 @@ public class NopCommerce {
 	public static void isHeading(WebDriver driver, String title) {
 		WebElement headingTag = driver.findElement(By.xpath("//div[contains(@class, 'content-header')]//h1"));
 		Assert.assertTrue(headingTag.getText().contains(title));
+	}
+	
+	private static void checkToolTip(WebDriver driver, Actions action, String ele, String title) {
+		WebElement element = driver.findElement(By.xpath("//label[@for='"+ele+"']/following-sibling::div"));
+		action.moveToElement(element).build().perform();
+		Assert.assertTrue(element.getAttribute("data-original-title").contains(title), "Tooltip for " + ele);
 	}
 }
