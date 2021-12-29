@@ -32,6 +32,14 @@ public class NopCommerce {
 		String discountAddedAlert = "The new discount has been added successfully.";
 		String activeButtonColor = "rgba(0, 98, 204, 1)";
 		String hoverButtonColor = "rgba(70, 126, 159, 1)";
+		String email = "admin@yourstore.com";
+		String password = "admin";
+		String dashboardTitle = "Dashboard";
+		String productListTitle = "Products";
+		String addProductTitle = "Add a new product";
+		String discountTitle = "Discounts";
+		String addDiscountTitle = "Add a new discount";
+		String editDiscountTitle = "Edit discount details";
 
 		// ========= Driver =========//
 		String url = "https://admin-demo.nopcommerce.com/Admin";
@@ -47,9 +55,13 @@ public class NopCommerce {
 		Assert.assertTrue(driver.getCurrentUrl().contains("login"));
 
 		WebElement emailField = driver.findElement(By.cssSelector("input[id=\"Email\"]"));
+		emailField.clear();
+		emailField.sendKeys(email);
 		Assert.assertFalse(emailField.getAttribute("value").isEmpty());
 
 		WebElement passwordField = driver.findElement(By.cssSelector("input[id=\"Password\"]"));
+		passwordField.clear();
+		passwordField.sendKeys(password);
 		Assert.assertFalse(passwordField.getAttribute("value").isEmpty());
 
 		WebElement loginBtn = driver.findElement(By.cssSelector("button[type=\"submit\"]"));
@@ -66,6 +78,7 @@ public class NopCommerce {
 
 		WebElement aside = driver.findElement(By.cssSelector("aside"));
 		Assert.assertTrue(aside.isDisplayed(), "Aside visibility");
+		isHeading(driver, dashboardTitle);
 
 		WebElement catalogLink = aside
 				.findElement(By.xpath("//aside//nav/ul/li/a/*[contains(text(),'Catalog')]/ancestor::a"));
@@ -80,13 +93,12 @@ public class NopCommerce {
 				By.xpath("//aside//nav/ul/li/a/*[contains(text(),'Catalog')]/ancestor::a/following-sibling::ul"));
 		Assert.assertTrue(catalogNestedList.getCssValue("display").equals("block"));
 
-		WebElement productLink = catalogLink.findElement(By.xpath(
-				"//aside//nav/ul/li/a/*[contains(text(),'Catalog')]"+
-				"/ancestor::a/following-sibling::ul/li/a/*[contains(text(), 'Products')]/"+
-				"ancestor::a"));
+		WebElement productLink = catalogLink.findElement(By.xpath("//aside//nav/ul/li/a/*[contains(text(),'Catalog')]"
+				+ "/ancestor::a/following-sibling::ul/li/a/*[contains(text(), 'Products')]/" + "ancestor::a"));
 		productLink.click();
 
 		Assert.assertTrue(driver.getCurrentUrl().contains("Product/List"));
+		isHeading(driver, productListTitle);
 		isLoading(driver);
 
 		WebElement addNewBtn = driver.findElement(By.xpath("//div[@class=\"content-wrapper\"]/form/div[1]//a"));
@@ -95,8 +107,10 @@ public class NopCommerce {
 		isActive(addNewBtn, action, activeButtonColor);
 		addNewBtn.click();
 
-		WebElement addNewProductHeading = driver.findElement(By.xpath("//form[@id=\"product-form\"]//h1"));
-		Assert.assertTrue(addNewProductHeading.getText().contains("Add a new product"));
+		
+//		WebElement addNewProductHeading = driver.findElement(By.xpath("//form[@id=\"product-form\"]//h1"));
+//		Assert.assertTrue(addNewProductHeading.getText().contains("Add a new product"));
+		isHeading(driver, addProductTitle);
 
 		// ==================== //
 		cardCollapse(driver, "product-info");
@@ -157,6 +171,7 @@ public class NopCommerce {
 		saveProductBtn.click();
 
 		Assert.assertTrue(driver.getCurrentUrl().contains("Product/List"));
+		isHeading(driver, productListTitle);
 
 		WebElement successAlert = driver.findElement(By.className("alert-success"));
 		System.out.println(successAlert.getCssValue("background-color"));
@@ -179,7 +194,7 @@ public class NopCommerce {
 //		isActive(productSearchBtn, action, activeButtonColor);
 		productSearchBtn.click();
 
-		WebElement tableDataProductName = driver.findElements(By.xpath("//table[@id='products-grid']//td[3]")).get(1);
+		WebElement tableDataProductName = driver.findElement(By.xpath("//table[@id='products-grid']//td[3]"));
 		Thread.sleep(1000);
 		Assert.assertEquals(tableDataProductName.getText(), productName);
 
@@ -195,21 +210,23 @@ public class NopCommerce {
 		Assert.assertTrue(driver.getCurrentUrl().contains("Discount/List"));
 		isLoading(driver);
 
-		WebElement discountHeadingTitle = driver
-				.findElement(By.xpath("//div[contains(@class, \"content-header\")]/h1"));
-//		WebElement discountHeadingTitle = driver.findElement(By.tagName("h1"));
-		System.out.println(discountHeadingTitle.getText());
-		Assert.assertTrue(discountHeadingTitle.getText().contains("Discounts"));
+//		WebElement discountHeadingTitle = driver
+//				.findElement(By.xpath("//div[contains(@class, \"content-header\")]/h1"));
+////		WebElement discountHeadingTitle = driver.findElement(By.tagName("h1"));
+//		System.out.println(discountHeadingTitle.getText());
+//		Assert.assertTrue(discountHeadingTitle.getText().contains("Discounts"));
+		isHeading(driver, discountTitle);
 
 		WebElement addNewDiscount = driver.findElement(By.linkText("Add new"));
 		addNewDiscount.click();
 
 		Assert.assertTrue(driver.getCurrentUrl().contains("Discount/Create"));
-
+		isHeading(driver, addDiscountTitle);
+		
 //		WebElement newDiscountHeadingTitle = driver.findElement(By.tagName("h1"));
-		WebElement newDiscountHeadingTitle = driver
-				.findElement(By.xpath("//div[contains(@class, \"content-header\")]/h1"));
-		Assert.assertTrue(newDiscountHeadingTitle.getText().contains("Add a new discount"));
+//		WebElement newDiscountHeadingTitle = driver
+//				.findElement(By.xpath("//div[contains(@class, \"content-header\")]/h1"));
+//		Assert.assertTrue(newDiscountHeadingTitle.getText().contains("Add a new discount"));
 
 		cardCollapse(driver, "discount-info");
 		WebElement discountNameElement = driver.findElement(By.id("Name"));
@@ -241,6 +258,7 @@ public class NopCommerce {
 
 		WebElement firstDate = driver
 				.findElement(By.xpath("//div[@id=\"StartDateUtc_dateview\"]//a[@data-value='" + startDate + "']"));
+		System.out.println(firstDate.getText());
 		firstDate.click();
 
 		// Second date picker
@@ -297,6 +315,7 @@ public class NopCommerce {
 		editDiscountBtn.click();
 
 		Assert.assertTrue(driver.getCurrentUrl().contains("Discount/Edit"));
+		isHeading(driver, editDiscountTitle);
 
 		cardCollapse(driver, "discount-applied-to-products");
 
@@ -317,7 +336,8 @@ public class NopCommerce {
 				popSearchProductName.sendKeys(productName);
 
 				WebElement popSearchBtn = driver.findElement(By.id("search-products"));
-				// isAction function not working here element is not attached to the page document
+				// isAction function not working here element is not attached to the page
+				// document
 //				isActive(popSearchBtn, action, activeButtonColor);
 				popSearchBtn.click();
 
@@ -356,7 +376,7 @@ public class NopCommerce {
 		System.out.println(discountUpdateSuccessAlert.getText());
 		Assert.assertTrue(isDiscountUpdatedAlertContainText, "Check the alert content");
 
-		driver.close();
+//		driver.close();
 
 	}
 
@@ -374,7 +394,7 @@ public class NopCommerce {
 			Assert.assertTrue(cardBody.getCssValue("display").contains("block"));
 		}
 	}
-	
+
 	// Handle search box expanding
 	public static void handleSearchBox(WebDriver driver) {
 		WebElement ele = driver.findElement(By.xpath("//div[contains(@class, 'card-search')]/div/div[1]"));
@@ -397,12 +417,17 @@ public class NopCommerce {
 		Assert.assertTrue(ele.getCssValue("background-color").equals(eq));
 
 	}
-	
+
 	public static void isHover(WebElement ele, Actions action, String eq) throws InterruptedException {
 		action.moveToElement(ele).build().perform();
 		Thread.sleep(1000);
 		System.out.println(ele.getCssValue("background-color"));
 		Assert.assertTrue(ele.getCssValue("background-color").equals(eq));
 
+	}
+	
+	public static void isHeading(WebDriver driver, String title) {
+		WebElement headingTag = driver.findElement(By.xpath("//div[contains(@class, 'content-header')]//h1"));
+		Assert.assertTrue(headingTag.getText().contains(title));
 	}
 }
