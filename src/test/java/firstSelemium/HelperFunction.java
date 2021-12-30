@@ -70,4 +70,15 @@ public class HelperFunction {
 			ele.click();
 		}
 	}
+	
+	public static void alertMessageChecker(WebDriver driver, String messageContent) {
+		WebElement successAlert = driver.findElement(By.className("alert-success"));
+		System.out.println(successAlert.getCssValue("background-color"));
+		boolean isSuccess = (successAlert.getCssValue("background-color").equals("rgba(23, 183, 109, 1)"));
+		Assert.assertTrue(isSuccess, "Check the alert back color");
+
+		boolean isAlertContainText = successAlert.getText().contains(messageContent);
+		System.out.println(successAlert.getText());
+		Assert.assertTrue(isAlertContainText, "Check the alert content");
+	}
 }

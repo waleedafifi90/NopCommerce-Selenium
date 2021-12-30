@@ -153,14 +153,7 @@ public class NopCommerce {
 		Assert.assertTrue(driver.getCurrentUrl().contains("Product/List"));
 		HelperFunction.isHeading(driver, Constant.productListTitle);
 
-		WebElement successAlert = driver.findElement(By.className("alert-success"));
-		System.out.println(successAlert.getCssValue("background-color"));
-		boolean isSuccess = (successAlert.getCssValue("background-color").equals("rgba(23, 183, 109, 1)"));
-		Assert.assertTrue(isSuccess, "Check the alert back color");
-
-		boolean isAlertContainText = successAlert.getText().contains(Constant.productSuccessAleart);
-		System.out.println(successAlert.getText());
-		Assert.assertTrue(isAlertContainText, "Check the alert content");
+		HelperFunction.alertMessageChecker(driver, Constant.productSuccessAleart);
 		HelperFunction.isLoading(driver);
 
 		// ======================= Check if product added to the list ===== //
@@ -223,15 +216,7 @@ public class NopCommerce {
 		Assert.assertTrue(driver.getCurrentUrl().contains("Discount/List"));
 		HelperFunction.isLoading(driver);
 
-		WebElement discountSuccessAlert = driver.findElement(By.className("alert-success"));
-		System.out.println(discountSuccessAlert.getCssValue("background-color"));
-		boolean isDiscountSuccess = (discountSuccessAlert.getCssValue("background-color")
-				.equals("rgba(23, 183, 109, 1)"));
-		Assert.assertTrue(isDiscountSuccess, "Check the alert back color");
-
-		boolean isDiscountAlertContainText = discountSuccessAlert.getText().contains(Constant.discountAddedAlert);
-		System.out.println(discountSuccessAlert.getText());
-		Assert.assertTrue(isDiscountAlertContainText, "Check the alert content");
+		HelperFunction.alertMessageChecker(driver, Constant.discountAddedAlert);
 
 		// Check if discount added using search form, then edit
 		HelperFunction.handleSearchBox(driver);
@@ -241,7 +226,7 @@ public class NopCommerce {
 		Assert.assertEquals(searchDiscountName.getAttribute("value"), Constant.discountName);
 
 		WebElement discountSearchBtn = driver.findElement(By.id("search-discounts"));
-//		isActive(discountSearchBtn, action, activeButtonColor);
+		HelperFunction.isActive(discountSearchBtn, action, Constant.activeButtonColor);
 		discountSearchBtn.click();
 		HelperFunction.isLoading(driver);
 
@@ -307,15 +292,7 @@ public class NopCommerce {
 		Assert.assertTrue(driver.getCurrentUrl().contains("Discount/List"));
 		HelperFunction.isLoading(driver);
 
-		WebElement discountUpdateSuccessAlert = driver.findElement(By.className("alert-success"));
-		System.out.println(discountUpdateSuccessAlert.getCssValue("background-color"));
-		boolean isDiscountUpdatedSuccess = (discountUpdateSuccessAlert.getCssValue("background-color")
-				.equals("rgba(23, 183, 109, 1)"));
-		Assert.assertTrue(isDiscountUpdatedSuccess, "Check the alert back color");
-
-		boolean isDiscountUpdatedAlertContainText = discountUpdateSuccessAlert.getText().contains(Constant.discountAlertUpdate);
-		System.out.println(discountUpdateSuccessAlert.getText());
-		Assert.assertTrue(isDiscountUpdatedAlertContainText, "Check the alert content");
+		HelperFunction.alertMessageChecker(driver, Constant.discountAlertUpdate);
 
 		// Back to product page to check the discount
 		navigateToProduct(driver, Constant.catalog);
