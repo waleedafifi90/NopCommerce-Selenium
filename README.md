@@ -1,6 +1,6 @@
 # Automation test using Selenium
 [![Selenium - 4.1.1](https://img.shields.io/badge/Selenium-4.1.1-2ea44f)](https://)
-[![Coverage - 85%](https://img.shields.io/badge/Coverage-85-2D4263)](https://)
+[![Coverage - 85%](https://img.shields.io/badge/Coverage-90-2D4263)](https://)
 
 <a href="https://selenium.dev"><img src="https://selenium.dev/images/selenium_logo_square_green.png" width="180" alt="Selenium"/></a>
 
@@ -18,7 +18,7 @@ git clone https://github.com/waleedafifi90/firstSelenium.git
 4. Configuring Selenium Webdriver with Eclipse.
 
 ### Description
-This test will test two scenario, add a new product and check if the product has been added to the list, and then add new discount then add the added product to the new discount
+This test will test one scenario, add a new product and check if the product has been added to the list, and then add new discount then add the added product to the new discount
 
 https://user-images.githubusercontent.com/57403758/147643809-dec5e978-1c5b-48e6-b230-581b27ba19a7.mp4
 
@@ -56,3 +56,8 @@ https://user-images.githubusercontent.com/57403758/147643809-dec5e978-1c5b-48e6-
           15. Click on save
           16. Return and check the alert message
 5. Close the driver
+
+## Latest update
+- [x] Create function to pick date
+- [x] Seperate Constant, functions into several classes
+- [x] Assert product information inside the table
