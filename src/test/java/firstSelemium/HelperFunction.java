@@ -7,8 +7,11 @@ import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
 
 public class HelperFunction {
-	public static void isHeading(WebDriver driver, String title) {
-		WebElement headingTag = driver.findElement(By.xpath("//div[contains(@class, 'content-header')]//h1"));
+	public static void validatePageOnLoad(WebDriver driver, String title, String url) {
+		Assert.assertTrue(driver.getCurrentUrl().contains(url));
+		String selector = url == "login" ? "//h1" : "//div[contains(@class, 'content-header')]//h1";
+		System.out.println(selector);
+		WebElement headingTag = driver.findElement(By.xpath(selector));
 		Assert.assertTrue(headingTag.getText().contains(title));
 	}
 

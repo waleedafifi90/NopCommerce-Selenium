@@ -34,7 +34,7 @@ public class NopCommerce {
 		Actions action = new Actions(driver);
 
 		// ======== Start Login page =========/
-		Assert.assertTrue(driver.getCurrentUrl().contains("login"));
+		HelperFunction.validatePageOnLoad(driver, "Admin area demo", "login");
 
 		WebElement emailField = driver.findElement(By.cssSelector("input[id=\"Email\"]"));
 		emailField.clear();
@@ -57,16 +57,13 @@ public class NopCommerce {
 		WebElement usernameElement = driver.findElement(By.xpath("//nav[contains(@class, 'main-header')]/div/ul[1]"));
 		Assert.assertTrue(usernameElement.getText().contains(Constant.usernameContent));
 
-		Assert.assertTrue(driver.getCurrentUrl().contains("Admin"));
-
 		WebElement aside = driver.findElement(By.cssSelector("aside"));
 		Assert.assertTrue(aside.isDisplayed(), "Aside visibility");
-		HelperFunction.isHeading(driver, Constant.dashboardTitle);
+		HelperFunction.validatePageOnLoad(driver, Constant.dashboardTitle, "Admin");
 
 		navigateToProduct(driver, Constant.catalog);
 
-		Assert.assertTrue(driver.getCurrentUrl().contains("Product/List"));
-		HelperFunction.isHeading(driver, Constant.productListTitle);
+		HelperFunction.validatePageOnLoad(driver, Constant.productListTitle, "Product/List");
 //		isLoading(driver);
 
 		WebElement addNewBtn = driver.findElement(By.xpath("//div[@class=\"content-wrapper\"]/form/div[1]//a"));
@@ -75,7 +72,7 @@ public class NopCommerce {
 		HelperFunction.isActive(addNewBtn, action, Constant.activeButtonColor);
 		addNewBtn.click();
 
-		HelperFunction.isHeading(driver, Constant.addProductTitle);
+		HelperFunction.validatePageOnLoad(driver, Constant.addProductTitle, "Product/Create");
 
 		// ==================== //
 		HelperFunction.cardCollapse(driver, "product-info");
@@ -150,8 +147,7 @@ public class NopCommerce {
 		HelperFunction.isActive(saveProductBtn, action, Constant.activeButtonColor);
 		saveProductBtn.click();
 
-		Assert.assertTrue(driver.getCurrentUrl().contains("Product/List"));
-		HelperFunction.isHeading(driver, Constant.productListTitle);
+		HelperFunction.validatePageOnLoad(driver, Constant.productListTitle, "Product/List");
 
 		HelperFunction.alertMessageChecker(driver, Constant.productSuccessAleart);
 		HelperFunction.isLoading(driver);
@@ -172,16 +168,14 @@ public class NopCommerce {
 		WebElement discountLink = driver.findElement(By.linkText("Discounts"));
 		discountLink.click();
 
-		Assert.assertTrue(driver.getCurrentUrl().contains("Discount/List"));
 		HelperFunction.isLoading(driver);
 
-		HelperFunction.isHeading(driver, Constant.discountTitle);
+		HelperFunction.validatePageOnLoad(driver, Constant.discountTitle, "Discount/List");
 
 		WebElement addNewDiscount = driver.findElement(By.linkText(Constant.addNew));
 		addNewDiscount.click();
 
-		Assert.assertTrue(driver.getCurrentUrl().contains("Discount/Create"));
-		HelperFunction.isHeading(driver, Constant.addDiscountTitle);
+		HelperFunction.validatePageOnLoad(driver, Constant.addDiscountTitle, "Discount/Create");
 
 		HelperFunction.cardCollapse(driver, "discount-info");
 		WebElement discountNameElement = driver.findElement(By.id("Name"));
@@ -213,7 +207,7 @@ public class NopCommerce {
 		saveDiscountBtn.click();
 
 		// Discount successfully added
-		Assert.assertTrue(driver.getCurrentUrl().contains("Discount/List"));
+		HelperFunction.validatePageOnLoad(driver, Constant.discountTitle, "Discount/List");
 		HelperFunction.isLoading(driver);
 
 		HelperFunction.alertMessageChecker(driver, Constant.discountAddedAlert);
@@ -239,8 +233,7 @@ public class NopCommerce {
 				.findElement(By.xpath("//table[@id=\"discounts-grid\"]//td[contains(@class, 'button-column')]/a"));
 		editDiscountBtn.click();
 
-		Assert.assertTrue(driver.getCurrentUrl().contains("Discount/Edit"));
-		HelperFunction.isHeading(driver, Constant.editDiscountTitle);
+		HelperFunction.validatePageOnLoad(driver, Constant.editDiscountTitle, "Discount/Edit");
 
 		HelperFunction.cardCollapse(driver, "discount-applied-to-products");
 
@@ -289,7 +282,7 @@ public class NopCommerce {
 		HelperFunction.isActive(saveEditDiscountBtn, action, Constant.activeButtonColor);
 		saveEditDiscountBtn.click();
 
-		Assert.assertTrue(driver.getCurrentUrl().contains("Discount/List"));
+		HelperFunction.validatePageOnLoad(driver, Constant.discountTitle, "Discount/List");
 		HelperFunction.isLoading(driver);
 
 		HelperFunction.alertMessageChecker(driver, Constant.discountAlertUpdate);
@@ -300,9 +293,10 @@ public class NopCommerce {
 
 		// Click on edit button for the product
 		WebElement editProduct = driver.findElement(By.xpath("//table[@id='products-grid']//td[8]/a"));
+		String editProductLink = editProduct.getAttribute("href");
 		editProduct.click();
-		HelperFunction.isHeading(driver, Constant.editProductTitle);
-
+		
+		HelperFunction.validatePageOnLoad(driver, Constant.editProductTitle, editProductLink);
 		HelperFunction.cardCollapse(driver, "product-price");
 
 		WebElement bodyElement = driver.findElement(By.xpath("//body"));

@@ -61,3 +61,12 @@ https://user-images.githubusercontent.com/57403758/147643809-dec5e978-1c5b-48e6-
 - [x] Create function to pick date
 - [x] Seperate Constant, functions into several classes
 - [x] Assert product information inside the table
+- [x] Include the url in heading validation
+
+
+## ToDo
+- [ ] Generic function to assert and fill inputs
+- [ ] Validate arrow direction in the aside navigation
+- [ ] Validate the `USD` within the price
+- [ ] Add an image to the added prodect
+- [ ] Check the active style for the selected menu item
