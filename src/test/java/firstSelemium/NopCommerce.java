@@ -1,5 +1,6 @@
 package firstSelemium;
 
+import java.text.ParseException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -13,9 +14,11 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 
+import firstSelemium.DatePicker;
+
 public class NopCommerce {
 
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) throws InterruptedException, ParseException {
 		// TODO Auto-generated method stub
 
 		// ===== Constant ===== //
@@ -49,6 +52,7 @@ public class NopCommerce {
 		String editProductTitle = "Edit product details - " + productName;
 		String productNameTooltip = "The name of the product.";
 		String productDescriptionTooltip = "Short description is the text that is displayed in product list i.e. сategory / manufacturer pages.";
+		String selectedCategory = "Computers";
 
 		// ========= Driver =========//
 		String url = "https://admin-demo.nopcommerce.com/Admin";
@@ -108,7 +112,7 @@ public class NopCommerce {
 
 		Assert.assertTrue(driver.getCurrentUrl().contains("Product/List"));
 		isHeading(driver, productListTitle);
-		isLoading(driver);
+//		isLoading(driver);
 
 		WebElement addNewBtn = driver.findElement(By.xpath("//div[@class=\"content-wrapper\"]/form/div[1]//a"));
 		Assert.assertEquals(addNewBtn.getText(), addNew);
@@ -149,11 +153,24 @@ public class NopCommerce {
 
 		List<WebElement> selectCategoryListItems = driver
 				.findElements(By.xpath("//ul[@id=\"SelectedCategoryIds_listbox\"]/li"));
-		selectCategoryListItems.get(0).click();
+		for (WebElement element : selectCategoryListItems) {
+			System.out.println(element.getText());
+			if (element.getText().equals(selectedCategory)) {
+				element.click();
+			}
+		}
 
-		WebElement selectedCategoryList = driver
-				.findElement(By.xpath("//ul[@id='SelectedCategoryIds_taglist']//*[contains(text(), 'Computers')]"));
-		Assert.assertEquals(selectCategoryListItems.get(0).getText(), "Computers");
+		List<WebElement> selectedCategoryList = driver
+				.findElements(By.xpath("//ul[@id='SelectedCategoryIds_taglist']/li"));
+
+		boolean isContainComputer = false;
+		for (WebElement element : selectedCategoryList) {
+			if (element.getText().equals(selectedCategory)) {
+				isContainComputer = true;
+				System.out.println(element.getText());
+			}
+		}
+		Assert.assertTrue(isContainComputer, "Check if the list contain Computer");
 
 		// ==================== //
 		cardCollapse(driver, "product-price");
@@ -250,35 +267,12 @@ public class NopCommerce {
 		Assert.assertEquals(dropdownDiscountType.getFirstSelectedOption().getText(), "Assigned to products");
 
 		// First date picker
-		WebElement startDatePickerDateSelect = driver
-				.findElement(By.xpath("//input[@id=\"StartDateUtc\"]/following-sibling::span/span[1]"));
-		startDatePickerDateSelect.click();
-
-//		WebElement nextMonth = driver
-//				.findElement(By.xpath("//div[@id=\"StartDateUtc_dateview\"]//a[@aria-label=\"Next\"]"));
-//		nextMonth.click();
-
-		WebElement firstDate = driver
-				.findElement(By.xpath("//div[@id=\"StartDateUtc_dateview\"]//a[@data-value='" + startDate + "']"));
-		System.out.println(firstDate.getText());
-		Thread.sleep(1000);
-		firstDate.click();
+		DatePicker.selectDate("2021", "December", "31", driver, "StartDateUtc_dateview", "StartDateUtc");
 
 		// Second date picker
-		WebElement endDatePickerDateSelect = driver
-				.findElement(By.xpath("//input[@id=\"EndDateUtc\"]/following-sibling::span/span[1]"));
-		endDatePickerDateSelect.click();
+		DatePicker.selectDate("2022", "February", "28", driver, "EndDateUtc_dateview", "EndDateUtc");
 
-		WebElement nextMonth1 = driver
-				.findElement(By.xpath("//div[@id=\"EndDateUtc_dateview\"]//a[@aria-label=\"Next\"]"));
-		nextMonth1.click();
-		Thread.sleep(1000);
-		nextMonth1.click();
-
-		WebElement endDatePicker = driver
-				.findElement(By.xpath("//div[@id=\"EndDateUtc_dateview\"]//a[@data-value='" + endDate + "']"));
-		endDatePicker.click();
-
+		
 		WebElement saveDiscountBtn = driver.findElement(By.name("save"));
 		saveDiscountBtn.click();
 
@@ -390,7 +384,7 @@ public class NopCommerce {
 		isHeading(driver, editProductTitle);
 
 		cardCollapse(driver, "product-price");
-		
+
 		WebElement bodyElement = driver.findElement(By.xpath("//body"));
 		boolean bodyClass = bodyElement.getAttribute("class").contains("basic-settings-mode");
 		if (bodyClass) {
@@ -417,7 +411,7 @@ public class NopCommerce {
 
 		WebElement tableDataProductName = driver.findElement(By.xpath("//table[@id='products-grid']//td[3]"));
 		Thread.sleep(1000);
-		Assert.assertEquals(tableDataProductName.getText(), productName);
+//		Assert.assertEquals(tableDataProductName.getText(), productName);
 	}
 
 	private static void navigateToProduct(WebDriver driver, String eleTitle) throws InterruptedException {
@@ -430,10 +424,15 @@ public class NopCommerce {
 		Thread.sleep(1000);
 		Assert.assertTrue(catalogListItem.getAttribute("class").contains("menu-open"));
 
+		WebElement arrow = driver
+				.findElement(By.xpath("//aside//nav/ul/li/a/*[contains(text(),'Catalog')]/ancestor::a/p/i"));
+		System.out.println(arrow.getCssValue("transform"));
+
 		checkNestedList(driver, eleTitle);
 
 		WebElement productLink = catalogLink.findElement(By.xpath("//aside//nav/ul/li/a/*[contains(text(),'Catalog')]"
 				+ "/ancestor::a/following-sibling::ul/li/a/*[contains(text(), 'Products')]/" + "ancestor::a"));
+
 		productLink.click();
 	}
 
@@ -494,10 +493,11 @@ public class NopCommerce {
 		WebElement headingTag = driver.findElement(By.xpath("//div[contains(@class, 'content-header')]//h1"));
 		Assert.assertTrue(headingTag.getText().contains(title));
 	}
-	
+
 	private static void checkToolTip(WebDriver driver, Actions action, String ele, String title) {
-		WebElement element = driver.findElement(By.xpath("//label[@for='"+ele+"']/following-sibling::div"));
+		WebElement element = driver.findElement(By.xpath("//label[@for='" + ele + "']/following-sibling::div"));
 		action.moveToElement(element).build().perform();
 		Assert.assertTrue(element.getAttribute("data-original-title").contains(title), "Tooltip for " + ele);
 	}
+
 }
