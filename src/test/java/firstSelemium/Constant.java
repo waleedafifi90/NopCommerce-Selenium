@@ -4,8 +4,8 @@ public class Constant {
 
 	static String productName = "PREMIUM CARE Cat & Dog Calming";
 	static String productDescription = "ADVANCED STRESS RELIEF FORMULA: Our pheromones";
-	static String inventoryMethod = "Track inventory by product attributes";
-	static String inventoryOption = "2";
+	static String inventoryMethod = "Track inventory";
+	static String inventoryOption = "1";
 	static String productSuccessAleart = "The new product has been added successfully.";
 	static String discountName = "New Year Discount";
 	static String startDate = "2021/11/31";
@@ -33,5 +33,7 @@ public class Constant {
 	static String productNameTooltip = "The name of the product.";
 	static String productDescriptionTooltip = "Short description is the text that is displayed in product list i.e. сategory / manufacturer pages.";
 	static String selectedCategory = "Computers";
+	static String price = "100";
+	static String quantity = "10000";
 
 }

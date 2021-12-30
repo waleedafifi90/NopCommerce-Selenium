@@ -21,6 +21,8 @@ public class NopCommerce {
 	public static void main(String[] args) throws InterruptedException, ParseException {
 		// TODO Auto-generated method stub
 
+		int sku = Constant.sku;
+		
 		// ========= Driver =========//
 		String url = "https://admin-demo.nopcommerce.com/Admin";
 		WebDriver driver = new ChromeDriver();
@@ -59,33 +61,33 @@ public class NopCommerce {
 
 		WebElement aside = driver.findElement(By.cssSelector("aside"));
 		Assert.assertTrue(aside.isDisplayed(), "Aside visibility");
-		isHeading(driver, Constant.dashboardTitle);
+		HelperFunction.isHeading(driver, Constant.dashboardTitle);
 
 		navigateToProduct(driver, Constant.catalog);
 
 		Assert.assertTrue(driver.getCurrentUrl().contains("Product/List"));
-		isHeading(driver, Constant.productListTitle);
+		HelperFunction.isHeading(driver, Constant.productListTitle);
 //		isLoading(driver);
 
 		WebElement addNewBtn = driver.findElement(By.xpath("//div[@class=\"content-wrapper\"]/form/div[1]//a"));
 		Assert.assertEquals(addNewBtn.getText(), Constant.addNew);
-		isHover(addNewBtn, action, Constant.hoverButtonColor);
-		isActive(addNewBtn, action, Constant.activeButtonColor);
+		HelperFunction.isHover(addNewBtn, action, Constant.hoverButtonColor);
+		HelperFunction.isActive(addNewBtn, action, Constant.activeButtonColor);
 		addNewBtn.click();
 
-		isHeading(driver, Constant.addProductTitle);
+		HelperFunction.isHeading(driver, Constant.addProductTitle);
 
 		// ==================== //
-		cardCollapse(driver, "product-info");
+		HelperFunction.cardCollapse(driver, "product-info");
 		// ==================== //
 
 		WebElement productNameElement = driver.findElement(By.id("Name"));
-		checkToolTip(driver, action, "Name", Constant.productNameTooltip);
+		HelperFunction.checkToolTip(driver, action, "Name", Constant.productNameTooltip);
 		productNameElement.sendKeys(Constant.productName);
 		Assert.assertEquals(productNameElement.getAttribute("value"), Constant.productName);
 
 		WebElement shortDescription = driver.findElement(By.id("ShortDescription"));
-		checkToolTip(driver, action, "ShortDescription", Constant.productDescriptionTooltip);
+		HelperFunction.checkToolTip(driver, action, "ShortDescription", Constant.productDescriptionTooltip);
 		shortDescription.sendKeys(Constant.productDescription);
 		Assert.assertEquals(shortDescription.getAttribute("value"), Constant.productDescription);
 
@@ -96,8 +98,8 @@ public class NopCommerce {
 		driver.switchTo().defaultContent();
 
 		WebElement skuElement = driver.findElement(By.name("Sku"));
-		skuElement.sendKeys(Integer.toString(Constant.sku));
-		Assert.assertEquals(skuElement.getAttribute("value"), Integer.toString(Constant.sku));
+		skuElement.sendKeys(Integer.toString(sku));
+		Assert.assertEquals(skuElement.getAttribute("value"), Integer.toString(sku));
 
 		WebElement category = driver.findElement(By.xpath("//select[@id=\"SelectedCategoryIds\"]/parent::div"));
 		category.click();
@@ -124,17 +126,17 @@ public class NopCommerce {
 		Assert.assertTrue(isContainComputer, "Check if the list contain Computer");
 
 		// ==================== //
-		cardCollapse(driver, "product-price");
+		HelperFunction.cardCollapse(driver, "product-price");
 		// ==================== //
 
 		WebElement priceField = driver.findElement(By.xpath("//input[@id=\"Price\"]/preceding-sibling::input"));
 		new Actions(driver).moveToElement(priceField).click().perform();
 
 		WebElement price = driver.findElement(By.xpath("//input[@id=\"Price\"]"));
-		price.sendKeys("100");
+		price.sendKeys(Constant.price);
 
 		// ====================//
-		cardCollapse(driver, "product-inventory");
+		HelperFunction.cardCollapse(driver, "product-inventory");
 		// ====================//
 
 		WebElement manageInventoryMethodId = driver.findElement(By.id("ManageInventoryMethodId"));
@@ -144,12 +146,12 @@ public class NopCommerce {
 		Assert.assertEquals(dropdown.getFirstSelectedOption().getText(), Constant.inventoryMethod);
 
 		WebElement saveProductBtn = driver.findElement(By.name("save"));
-		isHover(saveProductBtn, action, Constant.hoverButtonColor);
-		isActive(saveProductBtn, action, Constant.activeButtonColor);
+		HelperFunction.isHover(saveProductBtn, action, Constant.hoverButtonColor);
+		HelperFunction.isActive(saveProductBtn, action, Constant.activeButtonColor);
 		saveProductBtn.click();
 
 		Assert.assertTrue(driver.getCurrentUrl().contains("Product/List"));
-		isHeading(driver, Constant.productListTitle);
+		HelperFunction.isHeading(driver, Constant.productListTitle);
 
 		WebElement successAlert = driver.findElement(By.className("alert-success"));
 		System.out.println(successAlert.getCssValue("background-color"));
@@ -159,12 +161,12 @@ public class NopCommerce {
 		boolean isAlertContainText = successAlert.getText().contains(Constant.productSuccessAleart);
 		System.out.println(successAlert.getText());
 		Assert.assertTrue(isAlertContainText, "Check the alert content");
-		isLoading(driver);
+		HelperFunction.isLoading(driver);
 
 		// ======================= Check if product added to the list ===== //
-		handleSearchBox(driver);
+		HelperFunction.handleSearchBox(driver);
 
-		searchForProduct(driver, Constant.productName);
+		searchForProduct(driver, action, Constant.productName, sku, Constant.price, Constant.quantity);
 
 		// ============== Promotion ====================//
 
@@ -172,23 +174,23 @@ public class NopCommerce {
 				.findElement(By.xpath("//aside//nav/ul/li/a/*[contains(text(),'Promotions')]/ancestor::a"));
 		promotionLink.click();
 
-		checkNestedList(driver, Constant.promotion);
+		HelperFunction.checkNestedList(driver, Constant.promotion);
 
 		WebElement discountLink = driver.findElement(By.linkText("Discounts"));
 		discountLink.click();
 
 		Assert.assertTrue(driver.getCurrentUrl().contains("Discount/List"));
-		isLoading(driver);
+		HelperFunction.isLoading(driver);
 
-		isHeading(driver, Constant.discountTitle);
+		HelperFunction.isHeading(driver, Constant.discountTitle);
 
 		WebElement addNewDiscount = driver.findElement(By.linkText(Constant.addNew));
 		addNewDiscount.click();
 
 		Assert.assertTrue(driver.getCurrentUrl().contains("Discount/Create"));
-		isHeading(driver, Constant.addDiscountTitle);
+		HelperFunction.isHeading(driver, Constant.addDiscountTitle);
 
-		cardCollapse(driver, "discount-info");
+		HelperFunction.cardCollapse(driver, "discount-info");
 		WebElement discountNameElement = driver.findElement(By.id("Name"));
 		discountNameElement.sendKeys(Constant.discountName);
 		Assert.assertEquals(discountNameElement.getAttribute("value"), Constant.discountName);
@@ -219,7 +221,7 @@ public class NopCommerce {
 
 		// Discount successfully added
 		Assert.assertTrue(driver.getCurrentUrl().contains("Discount/List"));
-		isLoading(driver);
+		HelperFunction.isLoading(driver);
 
 		WebElement discountSuccessAlert = driver.findElement(By.className("alert-success"));
 		System.out.println(discountSuccessAlert.getCssValue("background-color"));
@@ -232,7 +234,7 @@ public class NopCommerce {
 		Assert.assertTrue(isDiscountAlertContainText, "Check the alert content");
 
 		// Check if discount added using search form, then edit
-		handleSearchBox(driver);
+		HelperFunction.handleSearchBox(driver);
 
 		WebElement searchDiscountName = driver.findElement(By.id("SearchDiscountName"));
 		searchDiscountName.sendKeys(Constant.discountName);
@@ -241,7 +243,7 @@ public class NopCommerce {
 		WebElement discountSearchBtn = driver.findElement(By.id("search-discounts"));
 //		isActive(discountSearchBtn, action, activeButtonColor);
 		discountSearchBtn.click();
-		isLoading(driver);
+		HelperFunction.isLoading(driver);
 
 		Thread.sleep(1000);
 
@@ -253,9 +255,9 @@ public class NopCommerce {
 		editDiscountBtn.click();
 
 		Assert.assertTrue(driver.getCurrentUrl().contains("Discount/Edit"));
-		isHeading(driver, Constant.editDiscountTitle);
+		HelperFunction.isHeading(driver, Constant.editDiscountTitle);
 
-		cardCollapse(driver, "discount-applied-to-products");
+		HelperFunction.cardCollapse(driver, "discount-applied-to-products");
 
 		WebElement addProductDiscount = driver.findElement(By.id("btnAddNewProduct"));
 		addProductDiscount.click();
@@ -299,11 +301,11 @@ public class NopCommerce {
 
 		WebElement saveEditDiscountBtn = driver.findElement(By.name("save"));
 //		isHover(saveDiscountBtn, action, hoverButtonColor);
-		isActive(saveEditDiscountBtn, action, Constant.activeButtonColor);
+		HelperFunction.isActive(saveEditDiscountBtn, action, Constant.activeButtonColor);
 		saveEditDiscountBtn.click();
 
 		Assert.assertTrue(driver.getCurrentUrl().contains("Discount/List"));
-		isLoading(driver);
+		HelperFunction.isLoading(driver);
 
 		WebElement discountUpdateSuccessAlert = driver.findElement(By.className("alert-success"));
 		System.out.println(discountUpdateSuccessAlert.getCssValue("background-color"));
@@ -317,14 +319,14 @@ public class NopCommerce {
 
 		// Back to product page to check the discount
 		navigateToProduct(driver, Constant.catalog);
-		searchForProduct(driver, Constant.productName);
+		searchForProduct(driver, action, Constant.productName, sku, Constant.price, Constant.quantity);
 
 		// Click on edit button for the product
 		WebElement editProduct = driver.findElement(By.xpath("//table[@id='products-grid']//td[8]/a"));
 		editProduct.click();
-		isHeading(driver, Constant.editProductTitle);
+		HelperFunction.isHeading(driver, Constant.editProductTitle);
 
-		cardCollapse(driver, "product-price");
+		HelperFunction.cardCollapse(driver, "product-price");
 
 		WebElement bodyElement = driver.findElement(By.xpath("//body"));
 		boolean bodyClass = bodyElement.getAttribute("class").contains("basic-settings-mode");
@@ -340,19 +342,29 @@ public class NopCommerce {
 
 	}
 
-	private static void searchForProduct(WebDriver driver, String productName) throws InterruptedException {
+	private static void searchForProduct(WebDriver driver, Actions action, String productName, int sku, String price, String quantity) throws InterruptedException {
 		// TODO Auto-generated method stub
 		WebElement productSearchNameField = driver.findElement(By.id("SearchProductName"));
 		productSearchNameField.sendKeys(productName);
 		Assert.assertEquals(productSearchNameField.getAttribute("value"), productName);
 
 		WebElement productSearchBtn = driver.findElement(By.id("search-products"));
-//		isActive(productSearchBtn, action, activeButtonColor);
+		HelperFunction.isHover(productSearchBtn, action, Constant.hoverButtonColor);
+		HelperFunction.isActive(productSearchBtn, action, Constant.activeButtonColor);
 		productSearchBtn.click();
-
+		Thread.sleep(1500);
+		
 		WebElement tableDataProductName = driver.findElement(By.xpath("//table[@id='products-grid']//td[3]"));
-		Thread.sleep(1000);
-//		Assert.assertEquals(tableDataProductName.getText(), productName);
+		Assert.assertEquals(tableDataProductName.getText(), productName);
+		
+//		WebElement tableDataProductSKU = driver.findElement(By.xpath("//table[@id='products-grid']//td[4]"));
+//		Assert.assertEquals(tableDataProductSKU.getText(), Integer.toString(sku));
+		
+		WebElement tableDataProductPrice = driver.findElement(By.xpath("//table[@id='products-grid']//td[5]"));
+		Assert.assertEquals(tableDataProductPrice.getText(), price);
+
+		WebElement tableDataProductQuantity = driver.findElement(By.xpath("//table[@id='products-grid']//td[6]"));		
+		Assert.assertEquals(tableDataProductQuantity.getText(), quantity);
 	}
 
 	private static void navigateToProduct(WebDriver driver, String eleTitle) throws InterruptedException {
@@ -371,7 +383,7 @@ public class NopCommerce {
 //		System.out.println(arrow.getCssValue("transform"));
 //		System.out.println(Math.cos(90*Math.PI/180));
 		
-		checkNestedList(driver, eleTitle);
+		HelperFunction.checkNestedList(driver, eleTitle);
 
 		WebElement productLink = catalogLink.findElement(By.xpath("//aside//nav/ul/li/a/*[contains(text(),'Catalog')]"
 				+ "/ancestor::a/following-sibling::ul/li/a/*[contains(text(), 'Products')]/" + "ancestor::a"));
@@ -379,68 +391,5 @@ public class NopCommerce {
 		productLink.click();
 	}
 
-	private static void checkNestedList(WebDriver driver, String listName) {
-		WebElement ele = driver.findElement(By.xpath(
-				"//aside//nav/ul/li/a/*[contains(text(),'" + listName + "')]/ancestor::a/following-sibling::ul"));
-		Assert.assertTrue(ele.getCssValue("display").equals("block"));
-
-	}
-
-	// Check collapsed div
-	public static void cardCollapse(WebDriver driver, String divName) {
-		WebElement ele = driver.findElement(By.id(divName));
-		if (ele.getAttribute("class").contains("collapsed-card")) {
-			ele.click();
-			WebElement collapseBtn = driver
-					.findElement(By.xpath("//div[@id='" + divName + "']//div[contains(@class, \"card-tools\")]//i"));
-			Assert.assertTrue(collapseBtn.getAttribute("class").contains("fa-minus"));
-
-			WebElement cardBody = driver
-					.findElement(By.xpath("//div[@id='" + divName + "']//div[contains(@class, \"card-body\")]"));
-			Assert.assertTrue(cardBody.getCssValue("display").contains("block"));
-		}
-	}
-
-	// Handle search box expanding
-	public static void handleSearchBox(WebDriver driver) {
-		WebElement ele = driver.findElement(By.xpath("//div[contains(@class, 'card-search')]/div/div[1]"));
-		if (!ele.getAttribute("class").contains("opened")) {
-			ele.click();
-		}
-	}
-
-	// Check of loader appears
-	public static void isLoading(WebDriver driver) {
-		WebElement loader = driver.findElement(By.id("ajaxBusy"));
-		Assert.assertTrue(loader.getCssValue("display").equals("block"));
-	}
-
-	// Check if active style effected on links
-	public static void isActive(WebElement ele, Actions action, String eq) throws InterruptedException {
-		action.clickAndHold(ele).build().perform();
-		Thread.sleep(1000);
-		System.out.println(ele.getCssValue("background-color"));
-		Assert.assertTrue(ele.getCssValue("background-color").equals(eq));
-
-	}
-
-	public static void isHover(WebElement ele, Actions action, String eq) throws InterruptedException {
-		action.moveToElement(ele).build().perform();
-		Thread.sleep(1000);
-		System.out.println(ele.getCssValue("background-color"));
-		Assert.assertTrue(ele.getCssValue("background-color").equals(eq));
-
-	}
-
-	public static void isHeading(WebDriver driver, String title) {
-		WebElement headingTag = driver.findElement(By.xpath("//div[contains(@class, 'content-header')]//h1"));
-		Assert.assertTrue(headingTag.getText().contains(title));
-	}
-
-	private static void checkToolTip(WebDriver driver, Actions action, String ele, String title) {
-		WebElement element = driver.findElement(By.xpath("//label[@for='" + ele + "']/following-sibling::div"));
-		action.moveToElement(element).build().perform();
-		Assert.assertTrue(element.getAttribute("data-original-title").contains(title), "Tooltip for " + ele);
-	}
 
 }
