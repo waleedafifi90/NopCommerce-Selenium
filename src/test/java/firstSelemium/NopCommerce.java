@@ -127,10 +127,13 @@ public class NopCommerce {
 		// ==================== //
 
 		WebElement priceField = driver.findElement(By.xpath("//input[@id=\"Price\"]/preceding-sibling::input"));
+		Assert.assertTrue(priceField.getAttribute("title").contains("USD"));
 		new Actions(driver).moveToElement(priceField).click().perform();
 
 		WebElement price = driver.findElement(By.xpath("//input[@id=\"Price\"]"));
 		price.sendKeys(Constant.price);
+		
+		Assert.assertTrue(price.getAttribute("value").contains(Constant.price));
 
 		// ====================//
 		HelperFunction.cardCollapse(driver, "product-inventory");
