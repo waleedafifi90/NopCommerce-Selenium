@@ -47,30 +47,15 @@ public class DatePicker {
 					.contains(monthName));
 
 		}
-		// get java month number for desired month
-
-//		int javaMonthInt = getMonthJavaInt(monthName);
-
-		// Find dates of desired month only
 
 		List<WebElement> allDateOfDesiredMonth = driver
 				.findElements(By.xpath("//div[@id='" + cal + "']//table/tbody//a"));
 		for (WebElement d : allDateOfDesiredMonth) {
-//			System.out.println(d);
 			if (d.getAttribute("innerText").equals(day)) {
-				System.out.println(d);
 				d.click();
 				break;
 			}
 		}
 
-	}
-
-	public static int getMonthJavaInt(String monthName) throws ParseException {
-
-		Date date = new SimpleDateFormat("MMMM").parse(monthName);
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(date);
-		return cal.get(Calendar.MONTH);
 	}
 }
