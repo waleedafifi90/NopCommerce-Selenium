@@ -45,7 +45,6 @@ public class DatePicker {
 				driver.findElement(By.xpath("//div[@id='" + cal + "']//a[@aria-label=\"Next\"]")).click();
 			} while (!driver.findElement(By.xpath("//div[@id='" + cal + "']//a[@aria-live='assertive']")).getAttribute("innerText")
 					.contains(monthName));
-
 		}
 
 		List<WebElement> allDateOfDesiredMonth = driver

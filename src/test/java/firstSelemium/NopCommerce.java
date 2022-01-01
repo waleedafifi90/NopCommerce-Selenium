@@ -19,10 +19,10 @@ import org.testng.Assert;
 
 public class NopCommerce {
 
+	private static int sku = Constant.sku;
+
 	public static void main(String[] args) throws InterruptedException, ParseException {
 		// TODO Auto-generated method stub
-
-		int sku = Constant.sku;
 		
 		// ========= Driver =========//
 		String url = "https://admin-demo.nopcommerce.com/Admin";
@@ -316,6 +316,7 @@ public class NopCommerce {
 		}
 		
 		WebElement uploadFile = driver.findElement(By.cssSelector("[name=\"qqfile\"]"));
+		action.moveToElement(uploadFile).build().perform();
 		
 		uploadFile.sendKeys("/Users/waleedafifi/Desktop/speed.png");
 		WebElement uploadedListItem = driver.findElement(By.cssSelector("div ul.qq-upload-list li"));;
@@ -324,7 +325,11 @@ public class NopCommerce {
 
 		WebElement addImageToProduct = driver.findElement(By.id("addProductPicture"));
 		addImageToProduct.click();
-//		driver.close();
+		
+		WebElement imageTable = driver.findElement(By.xpath("//table[@id='productpictures-grid']/tbody//img"));
+		Assert.assertFalse(imageTable.getSize().equals(0));
+		
+		driver.close();
 
 	}
 
@@ -342,8 +347,8 @@ public class NopCommerce {
 		WebElement tableDataProductName = driver.findElement(By.xpath("//table[@id='products-grid']//td[3]"));
 		Assert.assertEquals(tableDataProductName.getText(), productName);
 		
-//		WebElement tableDataProductSKU = driver.findElement(By.xpath("//table[@id='products-grid']//td[4]"));
-//		Assert.assertEquals(tableDataProductSKU.getText(), Integer.toString(sku));
+		WebElement tableDataProductSKU = driver.findElement(By.xpath("//table[@id='products-grid']//td[4]"));
+		Assert.assertEquals(tableDataProductSKU.getText(), Integer.toString(sku));
 		
 		WebElement tableDataProductPrice = driver.findElement(By.xpath("//table[@id='products-grid']//td[5]"));
 		Assert.assertEquals(tableDataProductPrice.getText(), price);
