@@ -37,6 +37,8 @@ public class DatePicker {
 					.contains(year));
 		}
 		
+		Thread.sleep(1000);
+
 		WebElement curMonth = driver.findElement(By.xpath("//div[@id='" + cal + "']//a[@aria-live='assertive']"));
 		String currentMonth = curMonth.getAttribute("innerText");
 		
@@ -46,6 +48,8 @@ public class DatePicker {
 			} while (!driver.findElement(By.xpath("//div[@id='" + cal + "']//a[@aria-live='assertive']")).getAttribute("innerText")
 					.contains(monthName));
 		}
+
+		Thread.sleep(1000);
 
 		List<WebElement> allDateOfDesiredMonth = driver
 				.findElements(By.xpath("//div[@id='" + cal + "']//table/tbody//a"));

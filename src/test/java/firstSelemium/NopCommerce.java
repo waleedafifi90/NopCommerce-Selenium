@@ -206,7 +206,7 @@ public class NopCommerce {
 		DatePicker.selectDate("2022", "January", "1", driver, "StartDateUtc_dateview", "StartDateUtc");
 
 		// Second date picker
-		DatePicker.selectDate("2022", "March", "24", driver, "EndDateUtc_dateview", "EndDateUtc");
+		DatePicker.selectDate("2022", "February", "24", driver, "EndDateUtc_dateview", "EndDateUtc");
 
 		
 		WebElement saveDiscountBtn = driver.findElement(By.name("save"));
