@@ -68,5 +68,5 @@ https://user-images.githubusercontent.com/57403758/147643809-dec5e978-1c5b-48e6-
 - [ ] Generic function to assert and fill inputs
 - [ ] Validate arrow direction in the aside navigation
 - [x] Validate the `USD` within the price
-- [ ] Add an image to the added prodect
+- [x] Add an image to the added prodect
 - [ ] Check the active style for the selected menu item

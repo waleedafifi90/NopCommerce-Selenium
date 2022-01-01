@@ -51,7 +51,8 @@ public class DatePicker {
 		List<WebElement> allDateOfDesiredMonth = driver
 				.findElements(By.xpath("//div[@id='" + cal + "']//table/tbody//a"));
 		for (WebElement d : allDateOfDesiredMonth) {
-			if (d.getAttribute("innerText").equals(day)) {
+			if (d.getAttribute("innerText").equals(day) && !d.getAttribute("class").contains("k-other-month")) {
+//				System.out.println(d.getAttribute("innerText"));
 				d.click();
 				break;
 			}

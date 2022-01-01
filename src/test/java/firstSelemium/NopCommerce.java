@@ -1,7 +1,5 @@
 package firstSelemium;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.ParseException;
 import java.util.Iterator;
 import java.util.List;
@@ -12,8 +10,11 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
 public class NopCommerce {
@@ -25,6 +26,8 @@ public class NopCommerce {
 		
 		// ========= Driver =========//
 		String url = "https://admin-demo.nopcommerce.com/Admin";
+//		System.setProperty("webdriver.gecko.driver", "/opt/homebrew/bin/geckodriver");
+
 		WebDriver driver = new ChromeDriver();
 		driver.get(url);
 		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
@@ -200,10 +203,10 @@ public class NopCommerce {
 		Assert.assertEquals(dropdownDiscountType.getFirstSelectedOption().getText(), "Assigned to products");
 
 		// First date picker
-		DatePicker.selectDate("2021", "December", "31", driver, "StartDateUtc_dateview", "StartDateUtc");
+		DatePicker.selectDate("2022", "January", "1", driver, "StartDateUtc_dateview", "StartDateUtc");
 
 		// Second date picker
-		DatePicker.selectDate("2022", "February", "28", driver, "EndDateUtc_dateview", "EndDateUtc");
+		DatePicker.selectDate("2022", "March", "24", driver, "EndDateUtc_dateview", "EndDateUtc");
 
 		
 		WebElement saveDiscountBtn = driver.findElement(By.name("save"));
@@ -311,13 +314,21 @@ public class NopCommerce {
 			WebElement discountList = driver.findElement(By.xpath("//ul[@id=\"SelectedDiscountIds_taglist\"]/li"));
 			Assert.assertTrue(discountList.getText().contains(Constant.discountName));
 		}
+		
+		WebElement uploadFile = driver.findElement(By.cssSelector("[name=\"qqfile\"]"));
+		
+		uploadFile.sendKeys("/Users/waleedafifi/Desktop/speed.png");
+		WebElement uploadedListItem = driver.findElement(By.cssSelector("div ul.qq-upload-list li"));;
+		WebDriverWait wait = new WebDriverWait (driver, 60);
+		wait.until(ExpectedConditions.attributeContains(uploadedListItem, "class", "qq-upload-success"));
 
-		driver.close();
+		WebElement addImageToProduct = driver.findElement(By.id("addProductPicture"));
+		addImageToProduct.click();
+//		driver.close();
 
 	}
 
 	private static void searchForProduct(WebDriver driver, Actions action, String productName, int sku, String price, String quantity) throws InterruptedException {
-		// TODO Auto-generated method stub
 		WebElement productSearchNameField = driver.findElement(By.id("SearchProductName"));
 		productSearchNameField.sendKeys(productName);
 		Assert.assertEquals(productSearchNameField.getAttribute("value"), productName);
@@ -354,8 +365,14 @@ public class NopCommerce {
 		WebElement arrow = driver
 				.findElement(By.xpath("//aside//nav/ul/li/a/*[contains(text(),'Catalog')]/ancestor::a/p/i"));
 		
-//		System.out.println(arrow.getCssValue("transform"));
-//		System.out.println(Math.cos(90*Math.PI/180));
+		
+		int angleInDegrees = 90;
+		double angleInRadians = (angleInDegrees * Math.PI) / 180;
+		double cos = Math.cos(angleInRadians);
+
+		System.out.println(arrow.getCssValue("transform"));
+		System.out.println(cos);
+//		Math.cos(90*Math.PI/180)
 		
 		HelperFunction.checkNestedList(driver, eleTitle);
 
