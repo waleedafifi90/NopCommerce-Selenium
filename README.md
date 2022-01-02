@@ -64,6 +64,7 @@ https://user-images.githubusercontent.com/57403758/147869480-7768af65-6155-4dd4-
 - [x] Seperate Constant, functions into several classes
 - [x] Assert product information inside the table
 - [x] Include the url in heading validation
+- [x] Check the left bar color for the menu parent like Catalog, Promotion
 
 
 ## ToDo
