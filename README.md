@@ -70,3 +70,52 @@ https://user-images.githubusercontent.com/57403758/147643809-dec5e978-1c5b-48e6-
 - [x] Validate the `USD` within the price
 - [x] Add an image to the added prodect
 - [ ] Check the active style for the selected menu item
+
+## Custom function
+```Java
+/**
+ * @path src/test/java/firstSelenium/NopCommerce.java
+ */
+
+/** 
+ * @function searchForProduct 
+ * @webDriver driver (ChromeDriver, FireFoxDriver, ...)
+ * @actions action
+ * @string Product name saved into constant
+ * @int sku auto generated number
+ * @stirng stock quantity
+ * 
+ * @invoke searchForProduct(driver, action, Constant.productName, sku, Constant.price, Constant.quantity);
+*/
+
+/**
+ * 
+ * @function navigateToProduct
+ * @webDriver driver (ChromeDriver, FireFoxDriver, ...)
+ * @string eleTitle (Main category innerText)
+ * 
+ * @invoke navigateToProduct(driver, Constant.catalog)
+ * 
+ * This command will loop over the cart and get the quantity value
+ * then multiply it with the price then compare it with total price
+ * 
+*/
+```
+
+```Java
+/**
+ * @path src/test/java/firstSelenium/DatePicker.java
+ */
+
+/** 
+ * @function selectDate 
+ * @webDriver driver (ChromeDriver, FireFoxDriver, ...)
+ * @string year
+ * @string monthName (January, ...)
+ * @string day
+ * @stirng cal calendar date view container
+ * @string calButton calendar date picker parent container
+ * 
+ * @invoke DatePicker.selectDate("2022", "January", "1", driver, "StartDateUtc_dateview", "StartDateUtc");
+*/
+```

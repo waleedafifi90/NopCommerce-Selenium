@@ -20,12 +20,12 @@ import org.testng.Assert;
 public class NopCommerce {
 
 	private static int sku = Constant.sku;
+	static String url = "https://admin-demo.nopcommerce.com/Admin";
 
 	public static void main(String[] args) throws InterruptedException, ParseException {
 		// TODO Auto-generated method stub
-		
+
 		// ========= Driver =========//
-		String url = "https://admin-demo.nopcommerce.com/Admin";
 //		System.setProperty("webdriver.gecko.driver", "/opt/homebrew/bin/geckodriver");
 
 		WebDriver driver = new ChromeDriver();
@@ -118,7 +118,7 @@ public class NopCommerce {
 
 		boolean isContainComputer = false;
 		for (WebElement element : selectedCategoryList) {
-			if (element.getText().equals(Constant.selectedCategory)) {
+			if (element.getText().trim().equals(Constant.selectedCategory)) {
 				isContainComputer = true;
 				System.out.println(element.getText());
 			}
@@ -135,7 +135,7 @@ public class NopCommerce {
 
 		WebElement price = driver.findElement(By.xpath("//input[@id=\"Price\"]"));
 		price.sendKeys(Constant.price);
-		
+
 		Assert.assertTrue(price.getAttribute("value").contains(Constant.price));
 
 		// ====================//
@@ -208,7 +208,6 @@ public class NopCommerce {
 		// Second date picker
 		DatePicker.selectDate("2022", "February", "24", driver, "EndDateUtc_dateview", "EndDateUtc");
 
-		
 		WebElement saveDiscountBtn = driver.findElement(By.name("save"));
 		saveDiscountBtn.click();
 
@@ -226,7 +225,7 @@ public class NopCommerce {
 		Assert.assertEquals(searchDiscountName.getAttribute("value"), Constant.discountName);
 
 		WebElement discountSearchBtn = driver.findElement(By.id("search-discounts"));
-		HelperFunction.isActive(discountSearchBtn, action, Constant.activeButtonColor);
+//		HelperFunction.isActive(discountSearchBtn, action, Constant.activeButtonColor);
 		discountSearchBtn.click();
 		HelperFunction.isLoading(driver);
 
@@ -285,7 +284,7 @@ public class NopCommerce {
 
 		WebElement saveEditDiscountBtn = driver.findElement(By.name("save"));
 //		isHover(saveDiscountBtn, action, hoverButtonColor);
-		HelperFunction.isActive(saveEditDiscountBtn, action, Constant.activeButtonColor);
+//		HelperFunction.isActive(saveEditDiscountBtn, action, Constant.activeButtonColor);
 		saveEditDiscountBtn.click();
 
 		HelperFunction.validatePageOnLoad(driver, Constant.discountTitle, "Discount/List");
@@ -301,7 +300,7 @@ public class NopCommerce {
 		WebElement editProduct = driver.findElement(By.xpath("//table[@id='products-grid']//td[8]/a"));
 		String editProductLink = editProduct.getAttribute("href");
 		editProduct.click();
-		
+
 		HelperFunction.validatePageOnLoad(driver, Constant.editProductTitle, editProductLink);
 		HelperFunction.cardCollapse(driver, "product-price");
 
@@ -314,46 +313,49 @@ public class NopCommerce {
 			WebElement discountList = driver.findElement(By.xpath("//ul[@id=\"SelectedDiscountIds_taglist\"]/li"));
 			Assert.assertTrue(discountList.getText().contains(Constant.discountName));
 		}
-		
+
 		WebElement uploadFile = driver.findElement(By.cssSelector("[name=\"qqfile\"]"));
-		action.moveToElement(uploadFile).build().perform();
-		
+//		action.moveToElement(uploadFile).build().perform();
+
 		uploadFile.sendKeys("/Users/waleedafifi/Desktop/speed.png");
-		WebElement uploadedListItem = driver.findElement(By.cssSelector("div ul.qq-upload-list li"));;
-		WebDriverWait wait = new WebDriverWait (driver, 60);
+		WebElement uploadedListItem = driver.findElement(By.cssSelector("div ul.qq-upload-list li"));
+		
+		WebDriverWait wait = new WebDriverWait(driver, 60);
 		wait.until(ExpectedConditions.attributeContains(uploadedListItem, "class", "qq-upload-success"));
 
 		WebElement addImageToProduct = driver.findElement(By.id("addProductPicture"));
 		addImageToProduct.click();
-		
+
 		WebElement imageTable = driver.findElement(By.xpath("//table[@id='productpictures-grid']/tbody//img"));
 		Assert.assertFalse(imageTable.getSize().equals(0));
-		
+
 		driver.close();
 
 	}
 
-	private static void searchForProduct(WebDriver driver, Actions action, String productName, int sku, String price, String quantity) throws InterruptedException {
+	private static void searchForProduct(WebDriver driver, Actions action, String productName, int sku, String price,
+			String quantity) throws InterruptedException {
 		WebElement productSearchNameField = driver.findElement(By.id("SearchProductName"));
 		productSearchNameField.sendKeys(productName);
 		Assert.assertEquals(productSearchNameField.getAttribute("value"), productName);
 
 		WebElement productSearchBtn = driver.findElement(By.id("search-products"));
-		HelperFunction.isHover(productSearchBtn, action, Constant.hoverButtonColor);
-		HelperFunction.isActive(productSearchBtn, action, Constant.activeButtonColor);
+//		HelperFunction.isHover(productSearchBtn, action, Constant.hoverButtonColor);
+//		HelperFunction.isActive(productSearchBtn, action, Constant.activeButtonColor);
 		productSearchBtn.click();
 		Thread.sleep(1500);
-		
+
 		WebElement tableDataProductName = driver.findElement(By.xpath("//table[@id='products-grid']//td[3]"));
+		action.moveToElement(tableDataProductName);
 		Assert.assertEquals(tableDataProductName.getText(), productName);
-		
+
 		WebElement tableDataProductSKU = driver.findElement(By.xpath("//table[@id='products-grid']//td[4]"));
 		Assert.assertEquals(tableDataProductSKU.getText(), Integer.toString(sku));
-		
+
 		WebElement tableDataProductPrice = driver.findElement(By.xpath("//table[@id='products-grid']//td[5]"));
 		Assert.assertEquals(tableDataProductPrice.getText(), price);
 
-		WebElement tableDataProductQuantity = driver.findElement(By.xpath("//table[@id='products-grid']//td[6]"));		
+		WebElement tableDataProductQuantity = driver.findElement(By.xpath("//table[@id='products-grid']//td[6]"));
 		Assert.assertEquals(tableDataProductQuantity.getText(), quantity);
 	}
 
@@ -369,8 +371,7 @@ public class NopCommerce {
 
 		WebElement arrow = driver
 				.findElement(By.xpath("//aside//nav/ul/li/a/*[contains(text(),'Catalog')]/ancestor::a/p/i"));
-		
-		
+
 		int angleInDegrees = 90;
 		double angleInRadians = (angleInDegrees * Math.PI) / 180;
 		double cos = Math.cos(angleInRadians);
@@ -378,7 +379,7 @@ public class NopCommerce {
 		System.out.println(arrow.getCssValue("transform"));
 		System.out.println(cos);
 //		Math.cos(90*Math.PI/180)
-		
+
 		HelperFunction.checkNestedList(driver, eleTitle);
 
 		WebElement productLink = catalogLink.findElement(By.xpath("//aside//nav/ul/li/a/*[contains(text(),'Catalog')]"
@@ -386,6 +387,5 @@ public class NopCommerce {
 
 		productLink.click();
 	}
-
 
 }
