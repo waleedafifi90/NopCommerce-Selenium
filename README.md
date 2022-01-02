@@ -71,7 +71,7 @@ https://user-images.githubusercontent.com/57403758/147869480-7768af65-6155-4dd4-
 - [ ] Validate arrow direction in the aside navigation
 - [x] Validate the `USD` within the price
 - [x] Add an image to the added prodect
-- [ ] Check the active style for the selected menu item
+- [x] Check the active style for the selected menu item
 
 ## Custom function
 ```Java

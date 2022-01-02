@@ -4,6 +4,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
 public class HelperFunction {
@@ -83,5 +85,12 @@ public class HelperFunction {
 		boolean isAlertContainText = successAlert.getText().contains(messageContent);
 		System.out.println(successAlert.getText());
 		Assert.assertTrue(isAlertContainText, "Check the alert content");
+	}
+	
+	public static void checkActiveNavItem(WebDriver driver, String itemText) {
+		WebElement ele = driver.findElement(By.linkText(itemText));
+		WebDriverWait wait = new WebDriverWait(driver, 10);
+		wait.until(ExpectedConditions.attributeContains(ele, "class", "active"));
+		Assert.assertTrue(ele.getAttribute("class").contains("active"));
 	}
 }

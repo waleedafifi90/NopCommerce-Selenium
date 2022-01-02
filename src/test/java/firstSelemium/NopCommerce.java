@@ -27,6 +27,7 @@ public class NopCommerce {
 
 		// ========= Driver =========//
 //		System.setProperty("webdriver.gecko.driver", "/opt/homebrew/bin/geckodriver");
+//		System.setProperty("webdriver.chrome.driver", "/usr/local/bin/chromedriver");
 
 		WebDriver driver = new ChromeDriver();
 		driver.get(url);
@@ -65,6 +66,7 @@ public class NopCommerce {
 		HelperFunction.validatePageOnLoad(driver, Constant.dashboardTitle, "Admin");
 
 		navigateToProduct(driver, Constant.catalog);
+		HelperFunction.checkActiveNavItem(driver, "Products");
 
 		HelperFunction.validatePageOnLoad(driver, Constant.productListTitle, "Product/List");
 //		isLoading(driver);
@@ -173,6 +175,7 @@ public class NopCommerce {
 
 		WebElement discountLink = driver.findElement(By.linkText("Discounts"));
 		discountLink.click();
+		HelperFunction.checkActiveNavItem(driver, "Discounts");
 
 		HelperFunction.isLoading(driver);
 
@@ -294,6 +297,7 @@ public class NopCommerce {
 
 		// Back to product page to check the discount
 		navigateToProduct(driver, Constant.catalog);
+		HelperFunction.checkActiveNavItem(driver, "Products");
 		searchForProduct(driver, action, Constant.productName, sku, Constant.price, Constant.quantity);
 
 		// Click on edit button for the product
@@ -384,7 +388,7 @@ public class NopCommerce {
 
 		WebElement productLink = catalogLink.findElement(By.xpath("//aside//nav/ul/li/a/*[contains(text(),'Catalog')]"
 				+ "/ancestor::a/following-sibling::ul/li/a/*[contains(text(), 'Products')]/" + "ancestor::a"));
-
+		
 		productLink.click();
 	}
 
