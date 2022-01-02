@@ -20,7 +20,9 @@ git clone https://github.com/waleedafifi90/firstSelenium.git
 ### Description
 This test will test one scenario, add a new product and check if the product has been added to the list, and then add new discount then add the added product to the new discount
 
-https://user-images.githubusercontent.com/57403758/147643809-dec5e978-1c5b-48e6-b230-581b27ba19a7.mp4
+
+https://user-images.githubusercontent.com/57403758/147869480-7768af65-6155-4dd4-9267-5243f466a7d6.mp4
+
 
 ### Tests covered
 1. Check login url
