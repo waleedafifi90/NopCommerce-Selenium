@@ -1,5 +1,7 @@
 package firstSelemium;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.ParseException;
 import java.util.Iterator;
 import java.util.List;
@@ -10,7 +12,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
@@ -68,6 +69,8 @@ public class NopCommerce {
 		navigateToProduct(driver, Constant.catalog);
 		HelperFunction.checkActiveNavItem(driver, "Products");
 
+		HelperFunction.checkLeftBarMenu(driver, Constant.catalog);
+		
 		HelperFunction.validatePageOnLoad(driver, Constant.productListTitle, "Product/List");
 //		isLoading(driver);
 
@@ -176,7 +179,7 @@ public class NopCommerce {
 		WebElement discountLink = driver.findElement(By.linkText("Discounts"));
 		discountLink.click();
 		HelperFunction.checkActiveNavItem(driver, "Discounts");
-
+		HelperFunction.checkLeftBarMenu(driver, Constant.promotion);
 		HelperFunction.isLoading(driver);
 
 		HelperFunction.validatePageOnLoad(driver, Constant.discountTitle, "Discount/List");
@@ -380,8 +383,8 @@ public class NopCommerce {
 		double angleInRadians = (angleInDegrees * Math.PI) / 180;
 		double cos = Math.cos(angleInRadians);
 
-		System.out.println(arrow.getCssValue("transform"));
 		System.out.println(cos);
+		System.out.println(arrow.getCssValue("transform"));
 //		Math.cos(90*Math.PI/180)
 
 		HelperFunction.checkNestedList(driver, eleTitle);
@@ -391,5 +394,7 @@ public class NopCommerce {
 		
 		productLink.click();
 	}
+	
+	
 
 }

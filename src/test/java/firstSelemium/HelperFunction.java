@@ -50,7 +50,7 @@ public class HelperFunction {
 		WebElement ele = driver.findElement(By.xpath(
 				"//aside//nav/ul/li/a/*[contains(text(),'" + listName + "')]/ancestor::a/following-sibling::ul"));
 		Assert.assertTrue(ele.getCssValue("display").equals("block"));
-
+		
 	}
 
 	// Check collapsed div
@@ -92,5 +92,12 @@ public class HelperFunction {
 		WebDriverWait wait = new WebDriverWait(driver, 10);
 		wait.until(ExpectedConditions.attributeContains(ele, "class", "active"));
 		Assert.assertTrue(ele.getAttribute("class").contains("active"));
+	}
+	
+	public static void checkLeftBarMenu(WebDriver driver, String listName) {
+		WebElement eleLeftBar = driver.findElement(By.xpath(
+				"//aside//nav/ul/li/a/*[contains(text(),'" + listName + "')]/ancestor::a"));
+		Assert.assertEquals(eleLeftBar.getCssValue("border-color"), "rgb(0, 123, 255)");
+
 	}
 }
