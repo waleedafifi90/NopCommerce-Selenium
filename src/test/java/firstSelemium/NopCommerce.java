@@ -59,6 +59,10 @@ public class NopCommerce {
 		loginBtn.click();
 
 		// ======== Start Product page =========/
+		
+		boolean bodyElementOnLoad = driver.findElement(By.tagName("body")).getAttribute("class").contains("sidebar-collapse");
+		Assert.assertFalse(bodyElementOnLoad, "Check body element if it's not have the collapse aside page");
+		
 		WebElement usernameElement = driver.findElement(By.xpath("//nav[contains(@class, 'main-header')]/div/ul[1]"));
 		Assert.assertTrue(usernameElement.getText().contains(Constant.usernameContent));
 
@@ -158,7 +162,7 @@ public class NopCommerce {
 		HelperFunction.isActive(saveProductBtn, action, Constant.activeButtonColor);
 		saveProductBtn.click();
 
-		HelperFunction.validatePageOnLoad(driver, Constant.productListTitle, "Product/List", Constant.addNewProductPageTitle);
+		HelperFunction.validatePageOnLoad(driver, Constant.productListTitle, "Product/List", Constant.productPageTitle);
 
 		HelperFunction.alertMessageChecker(driver, Constant.productSuccessAleart);
 		HelperFunction.isLoading(driver);
