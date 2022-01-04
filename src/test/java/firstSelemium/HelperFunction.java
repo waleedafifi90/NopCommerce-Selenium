@@ -101,4 +101,13 @@ public class HelperFunction {
 		Assert.assertEquals(eleLeftBar.getCssValue("border-color"), "rgb(0, 123, 255)");
 
 	}
+	
+	public static void checkParentMenuItemOnHover(WebDriver driver, Actions action, String listName) {
+		WebElement el = driver.findElement(By.xpath("//aside//nav/ul/li/a/*[contains(text(),'"+listName+"')]/ancestor::li"));
+		action.moveToElement(el).build().perform();
+		
+		String anchorEl = driver.findElement(By.xpath("//aside//nav/ul/li/a/*[contains(text(),'"+listName+"')]/ancestor::a")).getCssValue("background-color");
+		Assert.assertEquals(anchorEl, "rgba(255, 255, 255, 0.1)");
+		
+	}
 }

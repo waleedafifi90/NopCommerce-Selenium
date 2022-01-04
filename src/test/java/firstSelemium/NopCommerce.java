@@ -22,6 +22,8 @@ public class NopCommerce {
 
 	private static int sku = Constant.sku;
 	static String url = "https://admin-demo.nopcommerce.com/Admin";
+	static WebDriver driver = new ChromeDriver();
+	static Actions action = new Actions(driver);
 
 	public static void main(String[] args) throws InterruptedException, ParseException {
 		// TODO Auto-generated method stub
@@ -30,13 +32,11 @@ public class NopCommerce {
 //		System.setProperty("webdriver.gecko.driver", "/opt/homebrew/bin/geckodriver");
 //		System.setProperty("webdriver.chrome.driver", "/usr/local/bin/chromedriver");
 
-		WebDriver driver = new ChromeDriver();
 		driver.get(url);
 		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 		driver.manage().window().maximize();
 
 		// ======== Action trigger =========/
-		Actions action = new Actions(driver);
 
 		// ======== Start Login page =========/
 		HelperFunction.validatePageOnLoad(driver, "Admin area demo", "login", Constant.loginPageTitle);
@@ -173,6 +173,7 @@ public class NopCommerce {
 		searchForProduct(driver, action, Constant.productName, sku, Constant.price, Constant.quantity);
 
 		// ============== Promotion ====================//
+		HelperFunction.checkParentMenuItemOnHover(driver, action, Constant.promotion);
 
 		WebElement promotionLink = driver
 				.findElement(By.xpath("//aside//nav/ul/li/a/*[contains(text(),'Promotions')]/ancestor::a"));
@@ -371,6 +372,7 @@ public class NopCommerce {
 	}
 
 	private static void navigateToProduct(WebDriver driver, String eleTitle) throws InterruptedException {
+		HelperFunction.checkParentMenuItemOnHover(driver, action, Constant.catalog);
 		WebElement catalogLink = driver
 				.findElement(By.xpath("//aside//nav/ul/li/a/*[contains(text(),'Catalog')]/ancestor::a"));
 		catalogLink.click();
