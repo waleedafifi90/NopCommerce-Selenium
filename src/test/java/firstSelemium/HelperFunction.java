@@ -116,9 +116,28 @@ public class HelperFunction {
 		if(advance) {
 			String colorRGB = ((JavascriptExecutor)driver).executeScript("return window.getComputedStyle(arguments[0], ':before').getPropertyValue('background-color');",pseudoEle).toString();
 			Assert.assertEquals(colorRGB, "rgb(60, 141, 188)");
+			Assert.assertEquals(pseudoEle.getCssValue("margin-left"), "0px");
 		} else {
 			String colorRGB = ((JavascriptExecutor)driver).executeScript("return window.getComputedStyle(arguments[0], ':after').getPropertyValue('background-color');",pseudoEle).toString();
 			Assert.assertEquals(colorRGB, "rgb(239, 239, 239)");
+			Assert.assertEquals(pseudoEle.getCssValue("margin-left"), "-128px");
 		}
+	}
+	
+	public static void advanceMode(WebDriver driver, boolean mode) throws InterruptedException {
+		WebElement bodyElement = driver.findElement(By.xpath("//body"));
+		boolean bodyClass = bodyElement.getAttribute("class").contains("basic-settings-mode");
+		if (mode) {
+			if(bodyClass) {
+				WebElement advance = driver.findElement(By.xpath("//label[@for=\"advanced-settings-mode\"]"));
+				advance.click();				
+			}
+		} else {
+			if(!bodyClass) {
+				WebElement advance = driver.findElement(By.xpath("//label[@for=\"advanced-settings-mode\"]"));
+				advance.click();				
+			}
+		}
+		Thread.sleep(1000);
 	}
 }

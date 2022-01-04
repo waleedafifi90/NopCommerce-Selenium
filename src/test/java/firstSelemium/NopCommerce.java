@@ -85,6 +85,7 @@ public class NopCommerce {
 		addNewBtn.click();
 
 		HelperFunction.validatePageOnLoad(driver, Constant.addProductTitle, "Product/Create", Constant.addNewProductPageTitle);
+		HelperFunction.advanceMode(driver, false);
 		HelperFunction.isAdvance(driver, false);
 		// ==================== //
 		HelperFunction.cardCollapse(driver, "product-info");
@@ -313,18 +314,20 @@ public class NopCommerce {
 		String editProductLink = editProduct.getAttribute("href");
 		editProduct.click();
 
-		HelperFunction.validatePageOnLoad(driver, Constant.editProductTitle, editProductLink, Constant.productPageTitle);
+		HelperFunction.validatePageOnLoad(driver, Constant.editProductTitle, editProductLink, Constant.editProductPageTitle);
 		HelperFunction.cardCollapse(driver, "product-price");
 
-		WebElement bodyElement = driver.findElement(By.xpath("//body"));
-		boolean bodyClass = bodyElement.getAttribute("class").contains("basic-settings-mode");
-		if (bodyClass) {
-			WebElement advance = driver.findElement(By.xpath("//label[@for=\"advanced-settings-mode\"]"));
-			advance.click();
-
+//		WebElement bodyElement = driver.findElement(By.xpath("//body"));
+//		boolean bodyClass = bodyElement.getAttribute("class").contains("basic-settings-mode");
+//		if (bodyClass) {
+//			WebElement advance = driver.findElement(By.xpath("//label[@for=\"advanced-settings-mode\"]"));
+//			advance.click();
+		
+		HelperFunction.advanceMode(driver, true);
+		HelperFunction.isAdvance(driver, true);
 			WebElement discountList = driver.findElement(By.xpath("//ul[@id=\"SelectedDiscountIds_taglist\"]/li"));
 			Assert.assertTrue(discountList.getText().contains(Constant.discountName));
-		}
+//		}
 
 		WebElement uploadFile = driver.findElement(By.cssSelector("[name=\"qqfile\"]"));
 //		action.moveToElement(uploadFile).build().perform();
