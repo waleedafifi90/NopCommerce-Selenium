@@ -140,4 +140,15 @@ public class HelperFunction {
 		}
 		Thread.sleep(1000);
 	}
+	
+	public static void fillAndAssertField(WebDriver driver, Actions action, String element, String content) throws InterruptedException {
+		WebElement el = driver.findElement(By.id(element));
+		action.click(el).build().perform();
+//		System.out.println(el.getCssValue("box-shadow"));
+		Assert.assertEquals(el.getCssValue("box-shadow"), "rgba(0, 123, 255, 0.25) 0px 0px 0px 3.2px");
+		Thread.sleep(500);
+		el.sendKeys(content);
+		Assert.assertEquals(el.getAttribute("value"), content);
+
+	}
 }
