@@ -69,7 +69,7 @@ https://user-images.githubusercontent.com/57403758/147869480-7768af65-6155-4dd4-
 - [x] Check menu parent on hover background style (Basic, Advance)
 
 ## ToDo
-- [ ] Generic function to assert and fill inputs
+- [x] Generic function to assert and fill inputs
 - [ ] Validate arrow direction in the aside navigation
 - [x] Validate the `USD` within the price
 - [x] Add an image to the added prodect
