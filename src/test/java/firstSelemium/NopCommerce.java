@@ -85,7 +85,7 @@ public class NopCommerce {
 		addNewBtn.click();
 
 		HelperFunction.validatePageOnLoad(driver, Constant.addProductTitle, "Product/Create", Constant.addNewProductPageTitle);
-
+		HelperFunction.isAdvance(driver, false);
 		// ==================== //
 		HelperFunction.cardCollapse(driver, "product-info");
 		// ==================== //

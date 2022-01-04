@@ -1,6 +1,7 @@
 package firstSelemium;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -108,6 +109,16 @@ public class HelperFunction {
 		
 		String anchorEl = driver.findElement(By.xpath("//aside//nav/ul/li/a/*[contains(text(),'"+listName+"')]/ancestor::a")).getCssValue("background-color");
 		Assert.assertEquals(anchorEl, "rgba(255, 255, 255, 0.1)");
-		
+	}
+	
+	public static void isAdvance(WebDriver driver, boolean advance) {
+		WebElement pseudoEle = driver.findElement(By.xpath("//span[@data-locale-advanced=\"Advanced\"]"));
+		if(advance) {
+			String colorRGB = ((JavascriptExecutor)driver).executeScript("return window.getComputedStyle(arguments[0], ':before').getPropertyValue('background-color');",pseudoEle).toString();
+			Assert.assertEquals(colorRGB, "rgb(60, 141, 188)");
+		} else {
+			String colorRGB = ((JavascriptExecutor)driver).executeScript("return window.getComputedStyle(arguments[0], ':after').getPropertyValue('background-color');",pseudoEle).toString();
+			Assert.assertEquals(colorRGB, "rgb(239, 239, 239)");
+		}
 	}
 }
