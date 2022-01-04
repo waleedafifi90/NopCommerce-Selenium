@@ -65,7 +65,7 @@ https://user-images.githubusercontent.com/57403758/147869480-7768af65-6155-4dd4-
 - [x] Assert product information inside the table
 - [x] Include the url in heading validation
 - [x] Check the left bar color for the menu parent like Catalog, Promotion
-
+- [x] Check for page title within the Validation function
 
 ## ToDo
 - [ ] Generic function to assert and fill inputs
