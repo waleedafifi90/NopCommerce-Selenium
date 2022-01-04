@@ -9,8 +9,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
 public class HelperFunction {
-	public static void validatePageOnLoad(WebDriver driver, String title, String url) {
+	public static void validatePageOnLoad(WebDriver driver, String title, String url, String pageTitle) {
 		Assert.assertTrue(driver.getCurrentUrl().contains(url));
+		Assert.assertEquals(driver.getTitle(), pageTitle);
 		String selector = url == "login" ? "//h1" : "//div[contains(@class, 'content-header')]//h1";
 		System.out.println(selector);
 		WebElement headingTag = driver.findElement(By.xpath(selector));

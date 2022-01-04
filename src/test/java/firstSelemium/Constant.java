@@ -35,5 +35,12 @@ public class Constant {
 	static String selectedCategory = "Computers";
 	static String price = "100";
 	static String quantity = "10000";
-
+	static String loginPageTitle = "Your store. Login";
+	static String dashboardPageTitle = "Dashboard / nopCommerce administration";
+	static String productPageTitle = "Products / nopCommerce administration";
+	static String addNewProductPageTitle = "Add a new product / nopCommerce administration";
+	static String discountPageTitle = "Discounts / nopCommerce administration";
+	static String addDiscountPageTitle = "Add a new discount / nopCommerce administration";
+	static String editDiscountPageTitle = "Edit discount details / nopCommerce administration";
+	static String editProductPageTitle = "Edit product details / nopCommerce administration";
 }
