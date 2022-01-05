@@ -105,29 +105,7 @@ public class NopCommerce {
 
 		HelperFunction.fillAndAssertField(driver, action, "Sku", Integer.toString(sku));
 
-		WebElement category = driver.findElement(By.xpath("//select[@id=\"SelectedCategoryIds\"]/parent::div"));
-		category.click();
-
-		List<WebElement> selectCategoryListItems = driver
-				.findElements(By.xpath("//ul[@id=\"SelectedCategoryIds_listbox\"]/li"));
-		for (WebElement element : selectCategoryListItems) {
-			System.out.println(element.getText());
-			if (element.getText().equals(Constant.selectedCategory)) {
-				element.click();
-			}
-		}
-
-		List<WebElement> selectedCategoryList = driver
-				.findElements(By.xpath("//ul[@id='SelectedCategoryIds_taglist']/li"));
-
-		boolean isContainComputer = false;
-		for (WebElement element : selectedCategoryList) {
-			if (element.getText().trim().equals(Constant.selectedCategory)) {
-				isContainComputer = true;
-				System.out.println(element.getText());
-			}
-		}
-		Assert.assertTrue(isContainComputer, "Check if the list contain Computer");
+		HelperFunction.selectAssertList(driver, action, "SelectedCategoryIds", Constant.selectedCategory);
 
 		// ==================== //
 		HelperFunction.cardCollapse(driver, "product-price");
@@ -141,6 +119,13 @@ public class NopCommerce {
 		price.sendKeys(Constant.price);
 		Assert.assertTrue(price.getAttribute("value").contains(Constant.price));
 //		HelperFunction.fillAndAssertField(driver, action, "Price", Constant.price);
+		
+		WebElement isTaxExempt = driver.findElement(By.id("IsTaxExempt"));
+		isTaxExempt.click();
+		Assert.assertTrue(isTaxExempt.isSelected(), "Check if tax checkbox is selected");
+		
+		boolean pnlTaxCategory = driver.findElement(By.id("pnlTaxCategory")).getAttribute("class").contains("d-none");
+		Assert.assertTrue(pnlTaxCategory, "Check if the tax category field display none");
 
 		// ====================//
 		HelperFunction.cardCollapse(driver, "product-inventory");
@@ -150,6 +135,7 @@ public class NopCommerce {
 		Select dropdown = new Select(manageInventoryMethodId);
 		dropdown.selectByValue(Constant.inventoryOption);
 
+		Assert.assertEquals(manageInventoryMethodId.getCssValue("box-shadow"), "rgba(0, 123, 255, 0.25) 0px 0px 0px 3.2px");
 		Assert.assertEquals(dropdown.getFirstSelectedOption().getText(), Constant.inventoryMethod);
 
 		WebElement saveProductBtn = driver.findElement(By.name("save"));

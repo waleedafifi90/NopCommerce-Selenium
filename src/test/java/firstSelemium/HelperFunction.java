@@ -1,5 +1,7 @@
 package firstSelemium;
 
+import java.util.List;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -149,6 +151,35 @@ public class HelperFunction {
 		Thread.sleep(500);
 		el.sendKeys(content);
 		Assert.assertEquals(el.getAttribute("value"), content);
+
+	}
+	
+	public static void selectAssertList(WebDriver driver, Actions action, String element, String content) throws InterruptedException {		
+		WebElement category = driver.findElement(By.xpath("//select[@id='"+element+"']/parent::div"));
+		category.click();
+		Assert.assertEquals(category.getCssValue("box-shadow"), "rgba(0, 123, 255, 0.25) 0px 0px 0px 3.2px");
+		Thread.sleep(500);
+
+		List<WebElement> selectCategoryListItems = driver
+				.findElements(By.xpath("//ul[@id='"+element+"_listbox\']/li"));
+		for (WebElement ele : selectCategoryListItems) {
+			System.out.println(ele.getText());
+			if (ele.getText().equals(content)) {
+				ele.click();
+			}
+		}
+
+		List<WebElement> selectedCategoryList = driver
+				.findElements(By.xpath("//ul[@id='"+element+"_taglist']/li"));
+
+		boolean isContainComputer = false;
+		for (WebElement ele : selectedCategoryList) {
+			if (ele.getText().trim().equals(content)) {
+				isContainComputer = true;
+				System.out.println(ele.getText());
+			}
+		}
+		Assert.assertTrue(isContainComputer, "Check if the list contain Computer");
 
 	}
 }
