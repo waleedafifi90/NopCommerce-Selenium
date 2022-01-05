@@ -1,5 +1,6 @@
 package firstSelemium;
 
+import java.io.NotActiveException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.ParseException;
@@ -24,6 +25,8 @@ public class NopCommerce {
 	static String url = "https://admin-demo.nopcommerce.com/Admin";
 	static WebDriver driver = new ChromeDriver();
 	static Actions action = new Actions(driver);
+	static int productCount = 0;
+	static WebDriverWait wait = new WebDriverWait(driver,20);
 
 	public static void main(String[] args) throws InterruptedException, ParseException {
 		// TODO Auto-generated method stub
@@ -75,8 +78,14 @@ public class NopCommerce {
 		HelperFunction.checkLeftBarMenu(driver, Constant.catalog);
 
 		HelperFunction.validatePageOnLoad(driver, Constant.productListTitle, "Product/List", Constant.productPageTitle);
-//		isLoading(driver);
+		HelperFunction.isLoading(driver);
 
+		WebElement productTableCounter = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("products-grid_info"))); 
+
+		String[] splited = productTableCounter.getText().split("\\s+");
+		System.out.println(splited[2]);
+		productCount = Integer.parseInt(splited[2]);
+		
 		WebElement addNewBtn = driver.findElement(By.xpath("//div[@class=\"content-wrapper\"]/form/div[1]//a"));
 		Assert.assertEquals(addNewBtn.getText(), Constant.addNew);
 		HelperFunction.isHover(addNewBtn, action, Constant.hoverButtonColor);
@@ -147,6 +156,11 @@ public class NopCommerce {
 
 		HelperFunction.alertMessageChecker(driver, Constant.productSuccessAleart);
 		HelperFunction.isLoading(driver);
+		
+		
+		WebElement productTableCounterAdded = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("products-grid_info"))); 
+		String[] splited1 = productTableCounterAdded.getText().split("\\s+");
+		Assert.assertNotEquals(productCount, Integer.parseInt(splited1[2]));
 
 		// ======================= Check if product added to the list ===== //
 		HelperFunction.handleSearchBox(driver);
@@ -190,10 +204,14 @@ public class NopCommerce {
 		// Select discount type
 		WebElement discountType = driver.findElement(By.id("DiscountTypeId"));
 		Select dropdownDiscountType = new Select(discountType);
-		dropdownDiscountType.selectByValue("2");
-
+		dropdownDiscountType.selectByValue("2");		
+		Assert.assertEquals(discountType.getCssValue("box-shadow"), "rgba(0, 123, 255, 0.25) 0px 0px 0px 3.2px");
 		Assert.assertEquals(dropdownDiscountType.getFirstSelectedOption().getText(), "Assigned to products");
 
+		// Check Applied to product card appearance
+		boolean appliedToProductCard = driver.findElement(By.id("discount-applied-to-products")).getAttribute("class").contains("d-none");
+		Assert.assertFalse(appliedToProductCard);
+		
 		// First date picker
 		DatePicker.selectDate("2022", "January", "1", driver, "StartDateUtc_dateview", "StartDateUtc");
 
@@ -308,7 +326,7 @@ public class NopCommerce {
 		uploadFile.sendKeys("/Users/waleedafifi/Desktop/speed.png");
 		WebElement uploadedListItem = driver.findElement(By.cssSelector("div ul.qq-upload-list li"));
 
-		WebDriverWait wait = new WebDriverWait(driver, 60);
+//		WebDriverWait wait = new WebDriverWait(driver, 60);
 		wait.until(ExpectedConditions.attributeContains(uploadedListItem, "class", "qq-upload-success"));
 
 		WebElement addImageToProduct = driver.findElement(By.id("addProductPicture"));
