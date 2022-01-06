@@ -25,7 +25,7 @@ public class NopCommerce {
 	static String url = "https://admin-demo.nopcommerce.com/Admin";
 	static WebDriver driver = new ChromeDriver();
 	static Actions action = new Actions(driver);
-	static int productCount = 0;
+	static int tableCounter = 0;
 	static WebDriverWait wait = new WebDriverWait(driver,20);
 
 	public static void main(String[] args) throws InterruptedException, ParseException {
@@ -78,13 +78,14 @@ public class NopCommerce {
 		HelperFunction.checkLeftBarMenu(driver, Constant.catalog);
 
 		HelperFunction.validatePageOnLoad(driver, Constant.productListTitle, "Product/List", Constant.productPageTitle);
-		HelperFunction.isLoading(driver);
+//		HelperFunction.isLoading(driver);
 
-		WebElement productTableCounter = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("products-grid_info"))); 
-
-		String[] splited = productTableCounter.getText().split("\\s+");
-		System.out.println(splited[2]);
-		productCount = Integer.parseInt(splited[2]);
+//		WebElement productTableCounter = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("products-grid_info"))); 
+//
+//		String[] splited = productTableCounter.getText().split("\\s+");
+//		System.out.println(splited[2]);
+		tableCounter = HelperFunction.tableCounter(driver, wait, "products-grid_info");
+//		tableCounter = Integer.parseInt(splited[2]);
 		
 		WebElement addNewBtn = driver.findElement(By.xpath("//div[@class=\"content-wrapper\"]/form/div[1]//a"));
 		Assert.assertEquals(addNewBtn.getText(), Constant.addNew);
@@ -158,9 +159,11 @@ public class NopCommerce {
 		HelperFunction.isLoading(driver);
 		
 		
-		WebElement productTableCounterAdded = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("products-grid_info"))); 
-		String[] splited1 = productTableCounterAdded.getText().split("\\s+");
-		Assert.assertNotEquals(productCount, Integer.parseInt(splited1[2]));
+//		WebElement productTableCounterAdded = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("products-grid_info"))); 
+//		String[] splited1 = productTableCounterAdded.getText().split("\\s+");
+		
+		int tableCounterAfterAdd = HelperFunction.tableCounter(driver, wait, "products-grid_info");
+		Assert.assertNotEquals(tableCounter, tableCounterAfterAdd);
 
 		// ======================= Check if product added to the list ===== //
 		HelperFunction.handleSearchBox(driver);
@@ -184,6 +187,14 @@ public class NopCommerce {
 
 		HelperFunction.validatePageOnLoad(driver, Constant.discountTitle, "Discount/List", Constant.discountPageTitle);
 
+//		WebElement discountTableCounter = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("discounts-grid_info"))); 
+//
+//		String[] discountSplited = discountTableCounter.getText().split("\\s+");
+//		System.out.println(discountSplited[2]);
+		
+		// Store table count info in a global variable
+		tableCounter = HelperFunction.tableCounter(driver, wait, "discounts-grid_info");
+		
 		WebElement addNewDiscount = driver.findElement(By.linkText(Constant.addNew));
 		addNewDiscount.click();
 
@@ -192,14 +203,6 @@ public class NopCommerce {
 
 		HelperFunction.cardCollapse(driver, "discount-info");
 		HelperFunction.fillAndAssertField(driver, action, "Name", Constant.discountName);
-
-		WebElement discountAmount = driver
-				.findElement(By.xpath("//input[@id=\"DiscountAmount\"]/preceding-sibling::input"));
-		new Actions(driver).moveToElement(discountAmount).click().perform();
-
-		WebElement discount = driver.findElement(By.xpath("//input[@id=\"DiscountAmount\"]"));
-		discount.sendKeys("10");
-//		HelperFunction.fillAndAssertField(driver, action, "DiscountAmount", "10");
 
 		// Select discount type
 		WebElement discountType = driver.findElement(By.id("DiscountTypeId"));
@@ -212,11 +215,49 @@ public class NopCommerce {
 		boolean appliedToProductCard = driver.findElement(By.id("discount-applied-to-products")).getAttribute("class").contains("d-none");
 		Assert.assertFalse(appliedToProductCard);
 		
+		WebElement percentCheckBox = driver.findElement(By.id("UsePercentage"));
+		percentCheckBox.click();
+		Assert.assertTrue(percentCheckBox.isSelected());
+		
+//		WebElement discountAmount = driver
+//				.findElement(By.xpath("//input[@id=\"DiscountAmount\"]/preceding-sibling::input"));
+//		new Actions(driver).moveToElement(discountAmount).click().perform();
+//
+//		WebElement discount = driver.findElement(By.xpath("//input[@id=\"DiscountAmount\"]"));
+//		discount.sendKeys("10");
+//		HelperFunction.fillAndAssertField(driver, action, "DiscountAmount", "10");
+
+		boolean pnlDiscountAmount = driver.findElement(By.id("pnlDiscountAmount")).getAttribute("class").contains("d-none");
+		Assert.assertTrue(pnlDiscountAmount);
+		
+		WebElement discountAmount = driver
+				.findElement(By.xpath("//input[@id=\"DiscountPercentage\"]/preceding-sibling::input"));
+		new Actions(driver).moveToElement(discountAmount).click().perform();
+
+		WebElement discount = driver.findElement(By.xpath("//input[@id=\"DiscountPercentage\"]"));
+		discount.sendKeys("10");
+		Assert.assertTrue(discount.getAttribute("value").contains("10"));
+
+		
+		
+		WebElement maxDiscount = driver
+				.findElement(By.xpath("//input[@id=\"MaximumDiscountAmount\"]/preceding-sibling::input"));
+		new Actions(driver).moveToElement(maxDiscount).click().perform();
+
+		WebElement maximumDiscountAmount = driver.findElement(By.xpath("//input[@id=\"MaximumDiscountAmount\"]"));
+		maximumDiscountAmount.sendKeys("10");
+		Assert.assertTrue(maximumDiscountAmount.getAttribute("value").contains("10"));
+
+		
 		// First date picker
 		DatePicker.selectDate("2022", "January", "1", driver, "StartDateUtc_dateview", "StartDateUtc");
-
+		String startDateUtc = driver.findElement(By.id("StartDateUtc")).getAttribute("value");
+		Assert.assertEquals(startDateUtc, "1/1/2022 12:00 AM");
+		
 		// Second date picker
 		DatePicker.selectDate("2022", "February", "24", driver, "EndDateUtc_dateview", "EndDateUtc");
+		String endDateUtc = driver.findElement(By.id("EndDateUtc")).getAttribute("value");
+		Assert.assertEquals(endDateUtc, "2/24/2022 12:00 AM");
 
 		WebElement saveDiscountBtn = driver.findElement(By.name("save"));
 		saveDiscountBtn.click();
@@ -239,8 +280,16 @@ public class NopCommerce {
 
 		Thread.sleep(1000);
 
+		int discountTableCounterAfterAdd = HelperFunction.tableCounter(driver, wait, "discounts-grid_info");
+		Assert.assertNotEquals(tableCounter, discountTableCounterAfterAdd);
+
 		List<WebElement> tableData = driver.findElements(By.xpath("//table[@id=\"discounts-grid\"]//td"));
 		Assert.assertEquals(tableData.get(0).getText(), Constant.discountName);
+		Assert.assertEquals(tableData.get(1).getText(), Constant.assignedToProducts);
+		Assert.assertEquals(tableData.get(2).getText(), "10%");
+		Assert.assertEquals(tableData.get(3).getText(), Constant.startDate);
+		Assert.assertEquals(tableData.get(4).getText(), Constant.endDate);
+		Assert.assertEquals(tableData.get(5).getText(), "0");
 
 		WebElement editDiscountBtn = driver
 				.findElement(By.xpath("//table[@id=\"discounts-grid\"]//td[contains(@class, 'button-column')]/a"));

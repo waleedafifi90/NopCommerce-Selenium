@@ -182,4 +182,12 @@ public class HelperFunction {
 		Assert.assertTrue(isContainComputer, "Check if the list contain Computer");
 
 	}
+	
+	public static int tableCounter(WebDriver driver, WebDriverWait wait, String tableSelector) {
+		WebElement discountTableCounter = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id(tableSelector))); 
+
+		String[] discountSplited = discountTableCounter.getText().split("\\s+");
+		System.out.println(discountSplited[2]);
+		return Integer.parseInt(discountSplited[2]);
+	}; 
 }

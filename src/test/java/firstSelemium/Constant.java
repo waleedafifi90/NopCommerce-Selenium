@@ -8,8 +8,8 @@ public class Constant {
 	static String inventoryOption = "1";
 	static String productSuccessAleart = "The new product has been added successfully.";
 	static String discountName = "New Year Discount";
-	static String startDate = "2021/11/31";
-	static String endDate = "2022/1/28";
+	static String startDate = "01/01/2022 12:00:00 AM";
+	static String endDate = "02/24/2022 12:00:00 AM";
 	static String usernameContent = "John Smith";
 	static String discountAlertUpdate = "The discount has been updated successfully.";
 	static String discountAddedAlert = "The new discount has been added successfully.";
@@ -43,4 +43,5 @@ public class Constant {
 	static String addDiscountPageTitle = "Add a new discount / nopCommerce administration";
 	static String editDiscountPageTitle = "Edit discount details / nopCommerce administration";
 	static String editProductPageTitle = "Edit product details / nopCommerce administration";
+	static String assignedToProducts = "Assigned to products";
 }
