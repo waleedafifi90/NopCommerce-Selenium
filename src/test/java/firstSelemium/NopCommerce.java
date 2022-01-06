@@ -299,6 +299,12 @@ public class NopCommerce {
 				Constant.editDiscountPageTitle);
 
 		HelperFunction.cardCollapse(driver, "discount-applied-to-products");
+		
+		boolean discountProductsGrid = driver.findElement(By.xpath("//table[@id='products-grid']/tbody/tr/td")).getAttribute("innerText").contains("No data available in table");
+		Assert.assertTrue(discountProductsGrid);
+		
+		boolean discountUsageHistory = driver.findElement(By.id("discount-usage-history")).getAttribute("class").contains("d-none");
+		Assert.assertFalse(discountUsageHistory);
 
 		WebElement addProductDiscount = driver.findElement(By.id("btnAddNewProduct"));
 		addProductDiscount.click();
@@ -340,6 +346,9 @@ public class NopCommerce {
 		WebElement productDiscountTable = driver.findElement(By.xpath("//table[@id='products-grid']/tbody/tr/td[1]"));
 		Assert.assertEquals(productDiscountTable.getText(), Constant.productName);
 
+		tableCounter = HelperFunction.tableCounter(driver, wait, "products-grid_info");
+		Assert.assertEquals(tableCounter, 1);
+		
 		WebElement saveEditDiscountBtn = driver.findElement(By.name("save"));
 //		isHover(saveDiscountBtn, action, hoverButtonColor);
 //		HelperFunction.isActive(saveEditDiscountBtn, action, Constant.activeButtonColor);
