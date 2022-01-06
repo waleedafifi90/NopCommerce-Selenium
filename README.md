@@ -1,6 +1,6 @@
 # Automation test using Selenium
 [![Selenium - 4.1.1](https://img.shields.io/badge/Selenium-4.1.1-2ea44f)](https://)
-[![Coverage - 85%](https://img.shields.io/badge/Coverage-90-2D4263)](https://)
+[![Coverage - 85%](https://img.shields.io/badge/Coverage-99-2D4263)](https://)
 
 <a href="https://selenium.dev"><img src="https://selenium.dev/images/selenium_logo_square_green.png" width="180" alt="Selenium"/></a>
 
